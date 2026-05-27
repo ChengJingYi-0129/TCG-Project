@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include "THirono.hpp"
+#include "skill.hpp"
 
 using namespace THirono;
 
@@ -89,6 +90,7 @@ MyVirtualWorld::MyVirtualWorld()
 void MyVirtualWorld::init()
 {
     arena.init();
+    vfxWorld.init();
     loadBattleHistory();
     if (!gPreviewCharactersInitialized)
     {

@@ -6,6 +6,7 @@
 #include <ctime>
 #include <vector>
 #include "THirono.hpp"
+#include "skill.hpp"
 
 using namespace THirono;
 using namespace Gdiplus;

@@ -7,6 +7,7 @@
 #include <sstream>
 #include <string>
 #include "THirono.hpp"
+#include "skill.hpp"
 
 using namespace THirono;
 
@@ -115,6 +116,15 @@ void MyVirtualWorld::tickTime()
         deltaSeconds = 0.05f;
     }
     lastTickTimeMs = currentTimeMs;
+
+    vfxWorld.tickTime();
+
+    if (isSkillPlaying) {
+        skillTimer -= deltaSeconds;
+        if (skillTimer <= 0.0f) {
+            isSkillPlaying = false;
+        }
+    }
 
     if (currentScene == SCENE_BATTLE && !battlePaused && !battleEnded)
     {
@@ -228,6 +238,7 @@ bool MyVirtualWorld::handleKeyDown(unsigned char key)
             }
             return false;
 
+
         case 'a':
         case 'A':
             if (currentScene == SCENE_SELECT)
@@ -307,28 +318,62 @@ bool MyVirtualWorld::handleKeyDown(unsigned char key)
         case 'G':
             if (currentScene == SCENE_BATTLE)
             {
-                if (!battlePaused && !battleEnded) applySkillDamage(true, 1);
+                if (!battlePaused && !battleEnded) {
+                    applySkillDamage(false, 2);
+                    isSkillPlaying = true;
+                    activeSkillIsPlayer1 = false;
+                    activeSkillIndex = 2;
+                    skillTimer = 2.5f;
+                }
                 return true;
             }
             return false;
 
+        case 'f':
+        case 'F':
+            if (currentScene == SCENE_BATTLE)
+            {
+                if (!battlePaused && !battleEnded) {
+                    applySkillDamage(false, 1);
+                    isSkillPlaying = true;
+                    activeSkillIsPlayer1 = false;
+                    activeSkillIndex = 1;
+                    skillTimer = 2.0f;
+                }
+                return true;
+            }
+            return false;
         case '>':
         case '.':
             if (currentScene == SCENE_BATTLE)
             {
-                if (!battlePaused && !battleEnded) applySkillDamage(false, 1);
+                if (!battlePaused && !battleEnded) {
+                    applySkillDamage(true, 1);
+                    isSkillPlaying = true;
+                    activeSkillIsPlayer1 = true;
+                    activeSkillIndex = 1;
+                    skillTimer = 2.0f;
+                }
                 return true;
             }
             return false;
+
 
         case '?':
         case '/':
             if (currentScene == SCENE_BATTLE)
             {
-                if (!battlePaused && !battleEnded) applySkillDamage(false, 2);
+                if (!battlePaused && !battleEnded) {
+                    applySkillDamage(true, 2);
+                    isSkillPlaying = true;
+                    activeSkillIsPlayer1 = true;
+                    activeSkillIndex = 2;
+                    skillTimer = 2.5f;
+                }
                 return true;
             }
             return false;
+
 
         default:
             return false;
@@ -462,6 +507,17 @@ void MyVirtualWorld::drawBattleScene()
     arena.draw();
     player1Character.draw();
     player2Character.draw();
+
+    if (isSkillPlaying) {
+        glPushMatrix();
+        // 你可能需要根据施法者的位置，把特效平移到角色身上
+        // float x = activeSkillIsPlayer1 ? player1Character.getPositionX() : player2Character.getPositionX();
+        // float z = activeSkillIsPlayer1 ? player1Character.getPositionZ() : player2Character.getPositionZ();
+        // glTranslatef(x, 0.0f, z);
+
+        vfxWorld.draw(activeSkillIsPlayer1, activeSkillIndex);
+        glPopMatrix();
+    }
 
     const int width = glutGet(GLUT_WINDOW_WIDTH);
     const int height = glutGet(GLUT_WINDOW_HEIGHT);

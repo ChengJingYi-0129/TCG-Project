@@ -1,6 +1,8 @@
 #include <cmath>
 #include "THirono.hpp"
 #include "THironoSkill.hpp"
+#include "skill.hpp"
+
 
 using namespace THirono;
 

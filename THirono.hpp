@@ -3,6 +3,7 @@
 
 #include "CGLabmain.hpp"
 #include "THironoSkill.hpp"
+#include "skill.hpp"
 #include <string>
 #include <vector>
 #include <cmath>
@@ -146,6 +147,11 @@ public:
     std::string battleResultText;
     std::vector<std::string> battleHistoryEntries;
     int lastTickTimeMs;
+    skill::MyVirtualWorld vfxWorld;
+    bool isSkillPlaying = false;
+    bool activeSkillIsPlayer1 = true;
+    int activeSkillIndex = 1;
+    float skillTimer = 0.0f;
 
     MyVirtualWorld();
     void draw();

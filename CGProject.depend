@@ -93,3 +93,90 @@
 1779904771 c:\users\asus\desktop\cgproject\thironoskill.hpp
 	<string>
 
+1779905575 source:h:\tcg\tcg project\cglabmain.cpp
+	"CGLabxx.hpp"
+	<cstdlib>
+	<iostream>
+	<iomanip>
+	<cmath>
+	<GL/glut.h>
+	"CGLabmain.hpp"
+	"THirono.hpp"
+
+1779905575 h:\tcg\tcg project\cglabmain.hpp
+	<string>
+	<cmath>
+	<iostream>
+	<GL/glut.h>
+
+1779912924 h:\tcg\tcg project\thirono.hpp
+	"CGLabmain.hpp"
+	"THironoSkill.hpp"
+	"skill.hpp"
+	<string>
+	<vector>
+	<cmath>
+
+1779905575 h:\tcg\tcg project\thironoskill.hpp
+	<string>
+
+1779912967 source:h:\tcg\tcg project\thirono.cpp
+	<GL/glut.h>
+	<fstream>
+	<sstream>
+	<string>
+	<vector>
+	"THirono.hpp"
+	"skill.hpp"
+
+1779912357 source:h:\tcg\tcg project\thironoarena.cpp
+	<GL/glut.h>
+	<windows.h>
+	<gdiplus.h>
+	<cmath>
+	<ctime>
+	<vector>
+	"THirono.hpp"
+	"skill.hpp"
+
+1779912357 source:h:\tcg\tcg project\thironobattle.cpp
+	<GL/glut.h>
+	<windows.h>
+	<cmath>
+	<fstream>
+	<iomanip>
+	<sstream>
+	<string>
+	"THirono.hpp"
+	"skill.hpp"
+
+1779912358 source:h:\tcg\tcg project\thironocharacter.cpp
+	<algorithm>
+	<cmath>
+	<fstream>
+	<iomanip>
+	<iostream>
+	<limits>
+	<sstream>
+	"THirono.hpp"
+	"skill.hpp"
+
+1779912358 source:h:\tcg\tcg project\thironoskill.cpp
+	<cmath>
+	"THirono.hpp"
+	"THironoSkill.hpp"
+	"skill.hpp"
+
+1779912225 h:\tcg\tcg project\skill.hpp
+	<GL/glut.h>
+	<string>
+	<vector>
+
+1779912571 source:h:\tcg\tcg project\skill.cpp
+	<GL/glut.h>
+	<string>
+	<fstream>
+	<cmath>
+	<algorithm>
+	"skill.hpp"
+

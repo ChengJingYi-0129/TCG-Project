@@ -7,6 +7,7 @@
 #include <limits>
 #include <sstream>
 #include "THirono.hpp"
+#include "skill.hpp"
 
 using namespace THirono;
 
