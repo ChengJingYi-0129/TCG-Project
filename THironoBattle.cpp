@@ -323,6 +323,7 @@ bool MyVirtualWorld::handleKeyDown(unsigned char key)
                     isSkillPlaying = true;
                     activeSkillIsPlayer1 = false;
                     activeSkillIndex = 2;
+
                     skillTimer = 2.5f;
                 }
                 return true;

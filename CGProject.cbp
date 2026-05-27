@@ -40,12 +40,14 @@
 		<Unit filename="CGLabmain.cpp" />
 		<Unit filename="CGLabmain.hpp" />
 		<Unit filename="THirono.cpp" />
+		<Unit filename="THirono.hpp" />
 		<Unit filename="THironoArena.cpp" />
 		<Unit filename="THironoBattle.cpp" />
 		<Unit filename="THironoCharacter.cpp" />
-		<Unit filename="THirono.hpp" />
 		<Unit filename="THironoSkill.cpp" />
 		<Unit filename="THironoSkill.hpp" />
+		<Unit filename="skill.cpp" />
+		<Unit filename="skill.hpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
