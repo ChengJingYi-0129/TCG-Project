@@ -1,0 +1,95 @@
+# depslib dependency file v1.0
+1514140580 source:c:\users\asus\desktop\bachelor computer science\sem 3\tcg\cgproject\main.c
+	<windows.h>
+	<gl/gl.h>
+
+1776500213 source:c:\users\asus\desktop\bachelor computer science\sem 3\tcg\cgproject\thirono.cpp
+	<GL/glut.h>
+	<cmath>
+	"THirono.hpp"
+
+1776498441 source:c:\users\asus\desktop\bachelor computer science\sem 3\tcg\cgproject\cglabmain.cpp
+	"CGLabxx.hpp"
+	<cstdlib>
+	<iostream>
+	<iomanip>
+	<cmath>
+	<GL/glut.h>
+	"CGLabmain.hpp"
+	"THirono.hpp"
+
+1776497319 c:\users\asus\desktop\bachelor computer science\sem 3\tcg\cgproject\cglabmain.hpp
+	<string>
+	<cmath>
+	<iostream>
+	<GL/glut.h>
+
+1776500213 c:\users\asus\desktop\bachelor computer science\sem 3\tcg\cgproject\thirono.hpp
+	"CGLabmain.hpp"
+	<string>
+	<vector>
+	<cmath>
+
+1779902149 source:c:\users\asus\desktop\cgproject\cglabmain.cpp
+	"CGLabxx.hpp"
+	<cstdlib>
+	<iostream>
+	<iomanip>
+	<cmath>
+	<GL/glut.h>
+	"CGLabmain.hpp"
+	"THirono.hpp"
+
+1779869172 c:\users\asus\desktop\cgproject\cglabmain.hpp
+	<string>
+	<cmath>
+	<iostream>
+	<GL/glut.h>
+
+1779904809 c:\users\asus\desktop\cgproject\thirono.hpp
+	"CGLabmain.hpp"
+	"THironoSkill.hpp"
+	<string>
+	<vector>
+	<cmath>
+
+1779904156 source:c:\users\asus\desktop\cgproject\thirono.cpp
+	<GL/glut.h>
+	<fstream>
+	<sstream>
+	<string>
+	<vector>
+	"THirono.hpp"
+
+1779903093 source:c:\users\asus\desktop\cgproject\thironoarena.cpp
+	<GL/glut.h>
+	<windows.h>
+	<gdiplus.h>
+	<cmath>
+	<ctime>
+	<vector>
+	"THirono.hpp"
+
+1779903012 source:c:\users\asus\desktop\cgproject\thironocharacter.cpp
+	<algorithm>
+	<cmath>
+	<fstream>
+	<iomanip>
+	<iostream>
+	<limits>
+	<sstream>
+	"THirono.hpp"
+
+1779904070 source:c:\users\asus\desktop\cgproject\thironobattle.cpp
+	<GL/glut.h>
+	<windows.h>
+	<cmath>
+	<fstream>
+	<iomanip>
+	<sstream>
+	<string>
+	"THirono.hpp"
+
+1779904771 c:\users\asus\desktop\cgproject\thironoskill.hpp
+	<string>
+
