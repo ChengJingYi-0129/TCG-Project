@@ -37,7 +37,7 @@ public:
     MyModelLoader appleStarLoader;
     MyModelLoader treeLogLoader;
     MyModelLoader treeLeafLoader;
-    MyModelLoader treeAppleLoader;float rad = p1Skill2Angle * 3.14159265f / 180.0f;
+    MyModelLoader treeAppleLoader;
     MyModelLoader treeAppleStarLoader;
 
     float vfxAngle;
