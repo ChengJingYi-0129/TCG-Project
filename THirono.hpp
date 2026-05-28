@@ -74,6 +74,7 @@ public:
     const char* getCharacterName() const;
     float getPositionX() const;
     float getPositionZ() const;
+    float getFacingAngle() const;
 
 private:
     struct Vertex {
@@ -147,11 +148,27 @@ public:
     std::string battleResultText;
     std::vector<std::string> battleHistoryEntries;
     int lastTickTimeMs;
+
+
     skill::MyVirtualWorld vfxWorld;
-    bool isSkillPlaying = false;
-    bool activeSkillIsPlayer1 = true;
-    int activeSkillIndex = 1;
-    float skillTimer = 0.0f;
+
+    bool p1Skill1Active = false, p1Skill2Active = false;
+    float p1Skill1Timer = 0.0f, p1Skill2Timer = 0.0f;
+    float p1Skill1PosX = 0.0f, p1Skill2PosX = 0.0f;
+    float p1Skill1PosZ = 0.0f, p1Skill2PosZ = 0.0f;
+    float p1Skill1Angle = 0.0f, p1Skill2Angle = 0.0f;
+    float p1Skill1CD = 0.0f, p1Skill2CD = 0.0f;
+    float p1Skill1TickTimer = 0.0f;
+    bool p1Skill2HasHit = false;
+
+    bool p2Skill1Active = false, p2Skill2Active = false;
+    float p2Skill1Timer = 0.0f, p2Skill2Timer = 0.0f;
+    float p2Skill1PosX = 0.0f, p2Skill2PosX = 0.0f;
+    float p2Skill1PosZ = 0.0f, p2Skill2PosZ = 0.0f;
+    float p2Skill1Angle = 0.0f, p2Skill2Angle = 0.0f;
+    float p2Skill1CD = 0.0f, p2Skill2CD = 0.0f;
+    float p2Skill1TickTimer = 0.0f;
+    bool p2Skill2HasHit = false;
 
     MyVirtualWorld();
     void draw();

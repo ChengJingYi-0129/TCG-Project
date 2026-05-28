@@ -543,3 +543,8 @@ float ProjectCharacter::getPositionZ() const
 {
     return positionZ;
 }
+
+float ProjectCharacter::getFacingAngle() const
+{
+    return facingAngleDegrees;
+}

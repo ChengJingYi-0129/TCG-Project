@@ -119,12 +119,91 @@ void MyVirtualWorld::tickTime()
 
     vfxWorld.tickTime();
 
-    if (isSkillPlaying) {
-        skillTimer -= deltaSeconds;
-        if (skillTimer <= 0.0f) {
-            isSkillPlaying = false;
+
+    if (p1Skill1Active) {
+        p1Skill1Timer -= deltaSeconds;
+        if (p1Skill1Timer <= 0.0f) p1Skill1Active = false;
+
+        float angleRad = p1Skill1Angle * 3.14159265f / 180.0f;
+        p1Skill1PosX += sinf(angleRad) * 11.0f * deltaSeconds;
+        p1Skill1PosZ += cosf(angleRad) * 11.0f * deltaSeconds;
+
+        p1Skill1TickTimer -= deltaSeconds;
+        if (p1Skill1TickTimer <= 0.0f) {
+            float dx = player2Character.getPositionX() - p1Skill1PosX;
+            float dz = player2Character.getPositionZ() - p1Skill1PosZ;
+            if (sqrt(dx*dx + dz*dz) <= 3.0f) {
+                player2Health -= 4;
+                p1Skill1TickTimer = 0.4f;
+                resolveBattleIfNeeded();
+            }
         }
     }
+
+    if (p1Skill2Active) {
+        p1Skill2Timer -= deltaSeconds;
+        if (p1Skill2Timer <= 0.0f) p1Skill2Active = false;
+
+        if (!p1Skill2HasHit) {
+            float dx = player2Character.getPositionX() - p1Skill2PosX;
+            float dz = player2Character.getPositionZ() - p1Skill2PosZ;
+            float rad = p1Skill2Angle * 3.14159265f / 180.0f;
+            float localX = dx * cosf(rad) - dz * sinf(rad);
+            float localZ = dx * sinf(rad) + dz * cosf(rad);
+
+            if (localX >= -4.0f && localX <= 4.0f && localZ >= -2.0f && localZ <= 18.0f) {
+                player2Health -= 20;
+                p1Skill2HasHit = true;
+                resolveBattleIfNeeded();
+            }
+        }
+    }
+
+    if (p2Skill1Active) {
+        p2Skill1Timer -= deltaSeconds;
+        if (p2Skill1Timer <= 0.0f) p2Skill1Active = false;
+
+        p2Skill1TickTimer -= deltaSeconds;
+        if (p2Skill1TickTimer <= 0.0f) {
+            float dx = player1Character.getPositionX() - p2Skill1PosX;
+            float dz = player1Character.getPositionZ() - p2Skill1PosZ;
+            float rad = p2Skill1Angle * 3.14159265f / 180.0f;
+            float localX = dx * cosf(rad) - dz * sinf(rad);
+            float localZ = dx * sinf(rad) + dz * cosf(rad);
+
+
+            if (localX >= -4.0f && localX <= 4.0f && localZ >= -2.0f && localZ <= 18.0f) {
+                player1Health -= 4;
+                p2Skill1TickTimer = 0.4f;
+                resolveBattleIfNeeded();
+            }
+        }
+    }
+
+    if (p2Skill2Active) {
+        p2Skill2Timer -= deltaSeconds;
+        if (p2Skill2Timer <= 0.0f) p2Skill2Active = false;
+
+        float angleRad = p2Skill2Angle * 3.14159265f / 180.0f;
+        p2Skill2PosX += sinf(angleRad) * 9.0f * deltaSeconds;
+        p2Skill2PosZ += cosf(angleRad) * 9.0f * deltaSeconds;
+
+        if (!p2Skill2HasHit) {
+            float dx = player1Character.getPositionX() - p2Skill2PosX;
+            float dz = player1Character.getPositionZ() - p2Skill2PosZ;
+            if (sqrt(dx*dx + dz*dz) <= 4.0f) {
+                player1Health -= 20;
+                p2Skill2HasHit = true;
+                resolveBattleIfNeeded();
+            }
+        }
+    }
+
+    if (p1Skill1CD > 0.0f) p1Skill1CD -= deltaSeconds;
+    if (p1Skill2CD > 0.0f) p1Skill2CD -= deltaSeconds;
+    if (p2Skill1CD > 0.0f) p2Skill1CD -= deltaSeconds;
+    if (p2Skill2CD > 0.0f) p2Skill2CD -= deltaSeconds;
+
 
     if (currentScene == SCENE_BATTLE && !battlePaused && !battleEnded)
     {
@@ -226,17 +305,16 @@ bool MyVirtualWorld::handleKeyDown(unsigned char key)
 
         case 'h':
         case 'H':
-            if (currentScene == SCENE_HOME)
-            {
-                showHistory = !showHistory;
-                return true;
-            }
-            if (currentScene == SCENE_BATTLE)
-            {
-                if (!battlePaused && !battleEnded) applySkillDamage(true, 2);
-                return true;
-            }
-            return false;
+            if (currentScene == SCENE_HOME) { showHistory = !showHistory; return true; }
+            if (currentScene == SCENE_BATTLE && !battlePaused && !battleEnded && p1Skill2CD <= 0.0f) {
+                p1Skill2Active = true; p1Skill2Timer = 2.5f; p1Skill2CD = 7.0f;
+                p1Skill2HasHit = false;
+                vfxWorld.treeScale = 0.0f; vfxWorld.fallAngle = 0.0f; vfxWorld.fallSpeed = 0.0f;
+                float angleRad = player1Character.getFacingAngle() * 3.14159265f / 180.0f;
+                p1Skill2PosX = player1Character.getPositionX() + sinf(angleRad) * 3.0f;
+                p1Skill2PosZ = player1Character.getPositionZ() + cosf(angleRad) * 3.0f;
+                p1Skill2Angle = player1Character.getFacingAngle();
+            } return true;
 
 
         case 'a':
@@ -316,65 +394,36 @@ bool MyVirtualWorld::handleKeyDown(unsigned char key)
 
         case 'g':
         case 'G':
-            if (currentScene == SCENE_BATTLE)
-            {
-                if (!battlePaused && !battleEnded) {
-                    applySkillDamage(false, 2);
-                    isSkillPlaying = true;
-                    activeSkillIsPlayer1 = false;
-                    activeSkillIndex = 2;
+            if (currentScene == SCENE_BATTLE && !battlePaused && !battleEnded && p1Skill1CD <= 0.0f) {
+                p1Skill1Active = true; p1Skill1Timer = 2.0f; p1Skill1CD = 3.5f;
+                p1Skill1TickTimer = 0.0f;
+                float angleRad = player1Character.getFacingAngle() * 3.14159265f / 180.0f;
+                p1Skill1PosX = player1Character.getPositionX() + sinf(angleRad) * 3.0f;
+                p1Skill1PosZ = player1Character.getPositionZ() + cosf(angleRad) * 3.0f;
+                p1Skill1Angle = player1Character.getFacingAngle();
+            } return true;
 
-                    skillTimer = 2.5f;
-                }
-                return true;
-            }
-            return false;
-
-        case 'f':
-        case 'F':
-            if (currentScene == SCENE_BATTLE)
-            {
-                if (!battlePaused && !battleEnded) {
-                    applySkillDamage(false, 1);
-                    isSkillPlaying = true;
-                    activeSkillIsPlayer1 = false;
-                    activeSkillIndex = 1;
-                    skillTimer = 2.0f;
-                }
-                return true;
-            }
-            return false;
         case '>':
         case '.':
-            if (currentScene == SCENE_BATTLE)
-            {
-                if (!battlePaused && !battleEnded) {
-                    applySkillDamage(true, 1);
-                    isSkillPlaying = true;
-                    activeSkillIsPlayer1 = true;
-                    activeSkillIndex = 1;
-                    skillTimer = 2.0f;
-                }
-                return true;
-            }
-            return false;
-
+           if (currentScene == SCENE_BATTLE && !battlePaused && !battleEnded && p2Skill1CD <= 0.0f) {
+                p2Skill1Active = true; p2Skill1Timer = 2.0f; p2Skill1CD = 3.5f;
+                p2Skill1TickTimer = 0.0f;
+                float angleRad = player2Character.getFacingAngle() * 3.14159265f / 180.0f;
+                p2Skill1PosX = player2Character.getPositionX() + sinf(angleRad) * 3.0f;
+                p2Skill1PosZ = player2Character.getPositionZ() + cosf(angleRad) * 3.0f;
+                p2Skill1Angle = player2Character.getFacingAngle();
+            } return true;
 
         case '?':
         case '/':
-            if (currentScene == SCENE_BATTLE)
-            {
-                if (!battlePaused && !battleEnded) {
-                    applySkillDamage(true, 2);
-                    isSkillPlaying = true;
-                    activeSkillIsPlayer1 = true;
-                    activeSkillIndex = 2;
-                    skillTimer = 2.5f;
-                }
-                return true;
-            }
-            return false;
-
+            if (currentScene == SCENE_BATTLE && !battlePaused && !battleEnded && p2Skill2CD <= 0.0f) {
+                p2Skill2Active = true; p2Skill2Timer = 2.5f; p2Skill2CD = 7.0f;
+                p2Skill2HasHit = false;
+                float angleRad = player2Character.getFacingAngle() * 3.14159265f / 180.0f;
+                p2Skill2PosX = player2Character.getPositionX() + sinf(angleRad) * 3.0f;
+                p2Skill2PosZ = player2Character.getPositionZ() + cosf(angleRad) * 3.0f;
+                p2Skill2Angle = player2Character.getFacingAngle();
+            } return true;
 
         default:
             return false;
@@ -491,17 +540,7 @@ void MyVirtualWorld::resolveBattleIfNeeded()
     }
 }
 
-void MyVirtualWorld::applySkillDamage(bool attackerIsPlayer1, int skillIndex)
-{
-    const ProjectCharacter& attacker = attackerIsPlayer1 ? player1Character : player2Character;
-    const ProjectCharacter& defender = attackerIsPlayer1 ? player2Character : player1Character;
-    int& defenderHealth = attackerIsPlayer1 ? player2Health : player1Health;
 
-    if (skillSystem.tryApplySkillDamage(attackerIsPlayer1, skillIndex, attacker, defender, defenderHealth))
-    {
-        resolveBattleIfNeeded();
-    }
-}
 
 void MyVirtualWorld::drawBattleScene()
 {
@@ -509,16 +548,46 @@ void MyVirtualWorld::drawBattleScene()
     player1Character.draw();
     player2Character.draw();
 
-    if (isSkillPlaying) {
-        glPushMatrix();
-        // 你可能需要根据施法者的位置，把特效平移到角色身上
-        // float x = activeSkillIsPlayer1 ? player1Character.getPositionX() : player2Character.getPositionX();
-        // float z = activeSkillIsPlayer1 ? player1Character.getPositionZ() : player2Character.getPositionZ();
-        // glTranslatef(x, 0.0f, z);
-
-        vfxWorld.draw(activeSkillIsPlayer1, activeSkillIndex);
+    if (p1Skill1Active)
+    {
+        glPushMatrix(); glTranslatef(p1Skill1PosX, -4.0f, p1Skill1PosZ); glRotatef(p1Skill1Angle, 0.0f, 1.0f, 0.0f);
+        glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT); glDisable(GL_LIGHTING); glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glColor4f(1.0f, 0.0f, 0.0f, 0.22f); glBegin(GL_TRIANGLE_FAN); glVertex3f(0.0f, 0.02f, 0.0f); for (int i=0; i<=360; i+=15) glVertex3f(sinf(i*3.14f/180.0f)*3.0f, 0.02f, cosf(i*3.14f/180.0f)*3.0f); glEnd(); glPopAttrib();
+        vfxWorld.draw(true, 1);
         glPopMatrix();
     }
+
+    if (p1Skill2Active)
+    {
+        glPushMatrix(); glTranslatef(p1Skill2PosX, -4.0f, p1Skill2PosZ); glRotatef(p1Skill2Angle, 0.0f, 1.0f, 0.0f);
+        glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT); glDisable(GL_LIGHTING); glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glColor4f(1.0f, 0.0f, 0.0f, 0.25f); glBegin(GL_QUADS); glVertex3f(-4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, 18.0f); glVertex3f(-4.0f, 0.02f, 18.0f); glEnd();
+        glLineWidth(2.5f); glColor4f(1.0f, 0.0f, 0.0f, 0.75f); glBegin(GL_LINE_LOOP); glVertex3f(-4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, 18.0f); glVertex3f(-4.0f, 0.02f, 18.0f); glEnd(); glPopAttrib();
+        vfxWorld.draw(true, 2);
+        glPopMatrix();
+    }
+
+    if (p2Skill1Active)
+    {
+        glPushMatrix(); glTranslatef(p2Skill1PosX, -4.0f, p2Skill1PosZ); glRotatef(p2Skill1Angle, 0.0f, 1.0f, 0.0f);
+        glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT); glDisable(GL_LIGHTING); glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glColor4f(1.0f, 0.0f, 0.0f, 0.25f); glBegin(GL_QUADS); glVertex3f(-4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, 18.0f); glVertex3f(-4.0f, 0.02f, 18.0f); glEnd();
+        glLineWidth(2.5f); glColor4f(1.0f, 0.0f, 0.0f, 0.75f); glBegin(GL_LINE_LOOP); glVertex3f(-4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, 18.0f); glVertex3f(-4.0f, 0.02f, 18.0f); glEnd(); glPopAttrib();
+        vfxWorld.draw(false, 1);
+        glPopMatrix();
+    }
+
+    if (p2Skill2Active)
+    {
+        glPushMatrix(); glTranslatef(p2Skill2PosX, -4.0f, p2Skill2PosZ); glRotatef(p2Skill2Angle, 0.0f, 1.0f, 0.0f);
+        float radius = 4.0f;
+        glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT); glDisable(GL_LIGHTING); glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glColor4f(1.0f, 0.0f, 0.0f, 0.25f); glBegin(GL_TRIANGLE_FAN); glVertex3f(0.0f, 0.02f, 0.0f); for (int i=0; i<=360; i+=12) glVertex3f(sinf(i*3.14159f/180.0f)*radius, 0.02f, cosf(i*3.14159f/180.0f)*radius); glEnd();
+        glLineWidth(2.5f); glColor4f(1.0f, 0.0f, 0.0f, 0.75f); glBegin(GL_LINE_LOOP); for (int i=0; i<=360; i+=12) glVertex3f(sinf(i*3.14159f/180.0f)*radius, 0.02f, cosf(i*3.14159f/180.0f)*radius); glEnd(); glPopAttrib();
+        vfxWorld.draw(false, 2);
+        glPopMatrix();
+    }
+
 
     const int width = glutGet(GLUT_WINDOW_WIDTH);
     const int height = glutGet(GLUT_WINDOW_HEIGHT);
@@ -547,8 +616,40 @@ void MyVirtualWorld::drawBattleScene()
     drawHudBar(width - 288.0f, height - 98.0f, 250.0f, 20.0f, player2Health / 100.0f, 0.85f, 0.20f, 0.24f);
 
     glColor3f(0.70f, 0.82f, 1.0f);
-    drawBitmapText(38.0f, height - 114.0f, GLUT_BITMAP_HELVETICA_12, "Skill 1: G   Skill 2: H");
-    drawBitmapTextRight(width - 38.0f, height - 114.0f, GLUT_BITMAP_HELVETICA_12, "Skill 1: >   Skill 2: ?");
+    std::ostringstream p1HUD;
+    p1HUD << "G: Apple ";
+    if (p1Skill1CD > 0.0f) {
+        p1HUD << "[" << (int)p1Skill1CD + 1 << "s]";
+    } else {
+        p1HUD << "[Ready]";
+    }
+
+    p1HUD << "  H: Tree ";
+    if (p1Skill2CD > 0.0f) {
+        p1HUD << "[" << (int)p1Skill2CD + 1 << "s]";
+    } else {
+        p1HUD << "[Ready]";
+    }
+
+    glColor3f(0.70f, 0.82f, 1.0f);
+    drawBitmapText(38.0f, height - 114.0f, GLUT_BITMAP_HELVETICA_12, p1HUD.str());
+
+    std::ostringstream p2HUD;
+    p2HUD << ">: Vine ";
+    if (p2Skill1CD > 0.0f) {
+        p2HUD << "[" << (int)p2Skill1CD + 1 << "s]";
+    } else {
+        p2HUD << "[Ready]";
+    }
+
+    p2HUD << "  ?: Tornado ";
+    if (p2Skill2CD > 0.0f) {
+        p2HUD << "[" << (int)p2Skill2CD + 1 << "s]";
+    } else {
+        p2HUD << "[Ready]";
+    }
+
+    drawBitmapTextRight(width - 38.0f, height - 114.0f, GLUT_BITMAP_HELVETICA_12, p2HUD.str());
 
     glColor3f(1.0f, 0.95f, 0.55f);
     drawBitmapText(width * 0.5f - 220.0f, height - 22.0f, GLUT_BITMAP_HELVETICA_18, "P: Pause    C: Continue    B: Back");

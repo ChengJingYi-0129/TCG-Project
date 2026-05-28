@@ -10,7 +10,6 @@ using namespace std;
 
 namespace skill {
 
-// 模型加载器
 class MyModelLoader
 {
 public:
@@ -24,11 +23,10 @@ private:
     GLuint displayListId;
 };
 
-// 特效世界主类
 class MyVirtualWorld
 {
 public:
-    // 特效模型库
+
     MyModelLoader myVine;
     MyModelLoader myVineSpikes;
     MyModelLoader myVineRoses;
@@ -39,10 +37,9 @@ public:
     MyModelLoader appleStarLoader;
     MyModelLoader treeLogLoader;
     MyModelLoader treeLeafLoader;
-    MyModelLoader treeAppleLoader;
+    MyModelLoader treeAppleLoader;float rad = p1Skill2Angle * 3.14159265f / 180.0f;
     MyModelLoader treeAppleStarLoader;
 
-    // 动画控制变量
     float vfxAngle;
     float tornadoAngle;
     float roseAngle;
@@ -52,8 +49,9 @@ public:
     float treeScale;
     long int timeold, timenew, elapseTime;
 
+    long int animationStartTime;
     void init();
-    // 核心渲染接口，接收技能释放者与技能序号
+    void resetSkill();
     void draw(bool attackerIsPlayer1, int skillIndex);
 
     void tickTime()

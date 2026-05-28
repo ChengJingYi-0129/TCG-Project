@@ -8,7 +8,7 @@
 using namespace skill;
 using namespace std;
 
-// 1. 计算法线（模型加载所需）
+
 void computeSurfaceNormal(GLfloat vertex1[], GLfloat vertex2[], GLfloat vertex3[], GLfloat normal[])
 {
    GLfloat v1[3], v2[3];
@@ -23,7 +23,6 @@ void computeSurfaceNormal(GLfloat vertex1[], GLfloat vertex2[], GLfloat vertex3[
    if (magnitude > 0) { normal[0] /= magnitude; normal[1] /= magnitude; normal[2] /= magnitude; }
 }
 
-// 2. 加载模型
 void MyModelLoader::load(string filename, float scale)
 {
    int numberOfVertices, numberOfFaces;
@@ -63,7 +62,18 @@ void MyModelLoader::load(string filename, float scale)
 
 void MyModelLoader::draw() { glCallList(displayListId); }
 
-// 3. 特效初始化
+
+void MyVirtualWorld::resetSkill()
+{
+    vfxAngle = tornadoAngle = roseAngle = 0.0f;
+    warningAlpha = fallAngle = fallSpeed = treeScale = 0.0f;
+
+    timeold = glutGet(GLUT_ELAPSED_TIME);
+    animationStartTime = glutGet(GLUT_ELAPSED_TIME);
+}
+
+
+
 void MyVirtualWorld::init()
 {
    myVine.load("data/vine.txt", 1.0);
@@ -82,28 +92,38 @@ void MyVirtualWorld::init()
    vfxAngle = tornadoAngle = roseAngle = 0.0f;
    warningAlpha = fallAngle = fallSpeed = treeScale = 0.0f;
    timeold = glutGet(GLUT_ELAPSED_TIME);
+   resetSkill();
 }
 
-// 4. 特效分支绘制
+
+
 void MyVirtualWorld::draw(bool attackerIsPlayer1, int skillIndex)
 {
+    glPushAttrib(GL_ALL_ATTRIB_BITS);
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-    float currentTime = glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
+    float currentTime = (glutGet(GLUT_ELAPSED_TIME) - animationStartTime) / 1000.0f;
 
-    if (attackerIsPlayer1)
+    if (!attackerIsPlayer1)
     {
-        if (skillIndex != 2) // P1 基础：散射藤蔓
+        if (skillIndex != 2) // P2 vine_spike
         {
-            for (int j = 0; j < 5; j++) {
+
+            for (int j = 0; j < 5; j++)
+            {
                 glPushMatrix();
-                    glRotatef(-22.5f + (j * 11.25f), 0.0f, 1.0f, 0.0f);
-                    for (int i = 0; i < 5; i++) {
+                    glTranslatef(-4.0f + (j * 1.5f), 0.0f, 0.0f);
+
+                    for (int i = 0; i < 7   ; i++) {
                         glPushMatrix();
                             float animPhase = max(0.0f, float(sin(currentTime * 5.0f - i * 0.4f)));
                             float thrustDist = animPhase * 4.0f;
-                            glTranslatef(0.0f, thrustDist * 0.7f, i * 1.5f + thrustDist * 0.7f);
+
+                            glTranslatef(0.0f, thrustDist * 0.7f, -1.0f + (i * 2.25f) + thrustDist * 0.7f);
                             glRotatef(-140.0f, 1.0f, 0.0f, 0.0f);
+
+                            glScalef(2.0f, 2.0f, 2.0f);
+
                             glColor3f(0.1f, 0.5f, 0.1f); myVine.draw();
                             glColor3f(0.6f, 0.4f, 0.2f); myVineSpikes.draw();
                             glColor3f(0.9f, 0.1f, 0.3f); myVineRoses.draw();
@@ -112,7 +132,7 @@ void MyVirtualWorld::draw(bool attackerIsPlayer1, int skillIndex)
                 glPopMatrix();
             }
         }
-        else // P1 大招：龙卷风合体
+        else // P2 vines_tornado
         {
             glPushMatrix();
                 glRotatef(tornadoAngle, 0.0f, 1.0f, 0.0f);
@@ -121,19 +141,13 @@ void MyVirtualWorld::draw(bool attackerIsPlayer1, int skillIndex)
                 glColor3f(0.9f, 0.2f, 0.2f); roseloader.draw();
             glPopMatrix();
         }
-        treeScale = fallAngle = fallSpeed = 0.0f; // 重置 P2 状态机
+        treeScale = fallAngle = fallSpeed = 0.0f;
     }
     else
     {
-        if (skillIndex != 2) // P2 基础：流星雨
+        if (skillIndex != 2) // P1 apple_star
         {
             glPushMatrix();
-                glTranslatef(0.0f, 0.0f, 7.0f);
-                glDisable(GL_LIGHTING); glLineWidth(3.0f); glColor4f(1.0f, 0.0f, 0.0f, 0.8f);
-                glBegin(GL_LINE_LOOP);
-                for (int i = 0; i < 360; i += 10) glVertex3f(cosf(i * 3.14159f / 180.0f) * 3.0f, 0.01f, sinf(i * 3.14159f / 180.0f) * 3.0f);
-                glEnd(); glEnable(GL_LIGHTING);
-
                 glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
                 for (int p = 0; p < 15; p++) {
                     float targetX = cosf(fmodf(p * 73.17f, 6.28f)) * fmodf(p * 4.33f, 3.0f);
@@ -170,24 +184,43 @@ void MyVirtualWorld::draw(bool attackerIsPlayer1, int skillIndex)
                 glDepthMask(GL_TRUE); glDisable(GL_BLEND);
             glPopMatrix();
         }
-        else // P2 大招：苹果树砸下
+        else // P1 apple_tree
         {
-            if (treeScale < 1.0f) { treeScale += 0.04f; if (treeScale > 1.0f) treeScale = 1.0f; fallAngle = 0.0f; warningAlpha = treeScale * 0.9f; }
-            else { if (fallAngle < 90.0f) { fallSpeed += 0.04f; fallAngle += fallSpeed; warningAlpha = 0.9f * (1.0f - (fallAngle / 90.0f)); } else { fallAngle = 90.0f; warningAlpha = 0.0f; } }
-
-            if (warningAlpha > 0.0f) {
-                glPushMatrix(); glTranslatef(0.0f, 0.02f, 0.0f); glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); glDisable(GL_LIGHTING);
-                glColor4f(1.0f, 0.0f, 0.0f, warningAlpha); glBegin(GL_QUADS); glVertex3f(-4.0f, 0.0f, 2.0f); glVertex3f(4.0f, 0.0f, 2.0f); glVertex3f(4.0f, 0.0f, -18.0f); glVertex3f(-4.0f, 0.0f, -18.0f); glEnd();
-                glLineWidth(4.0f); glColor4f(1.0f, 0.2f, 0.2f, warningAlpha + 0.1f); glBegin(GL_LINE_LOOP); glVertex3f(-4.0f, 0.0f, 2.0f); glVertex3f(4.0f, 0.0f, 2.0f); glVertex3f(4.0f, 0.0f, -18.0f); glVertex3f(-4.0f, 0.0f, -18.0f); glEnd();
-                glEnable(GL_LIGHTING); glDisable(GL_BLEND); glPopMatrix();
+            if (treeScale < 1.0f) {
+                treeScale += 0.8f;
+                if (treeScale > 1.0f) treeScale = 1.0f;
+                fallAngle = 0.0f;
+            }
+            else {
+                if (fallAngle < 90.0f) {
+                    fallSpeed += 1.0f;
+                    fallAngle += fallSpeed;
+                } else {
+                    fallAngle = 90.0f;
+                }
             }
 
+
+
             glPushMatrix();
-                glRotatef(-fallAngle, 1.0f, 0.0f, 0.0f); glScalef(treeScale, treeScale, treeScale); glRotatef(90.0f, 1.0f, 0.0f, 0.0f); glScalef(2.0f, 2.0f, 2.0f);
-                glColor3f(0.45f, 0.25f, 0.08f); treeLogLoader.draw();
-                glDisable(GL_CULL_FACE); glColor3f(0.15f, 0.6f, 0.15f); treeLeafLoader.draw(); glColor3f(1.0f, 0.1f, 0.2f); treeAppleLoader.draw(); glColor3f(1.0f, 0.9f, 0.1f); treeAppleStarLoader.draw(); glEnable(GL_CULL_FACE);
+
+                glRotatef(fallAngle, 1.0f, 0.0f, 0.0f);
+                glScalef(treeScale, treeScale, treeScale);
+                glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+                glScalef(2.0f, 2.0f, 2.0f);
+
+                glColor3f(0.45f, 0.25f, 0.08f);
+                treeLogLoader.draw();
+                glDisable(GL_CULL_FACE);
+                glColor3f(0.15f, 0.6f, 0.15f);
+                treeLeafLoader.draw();
+                glColor3f(1.0f, 0.1f, 0.2f);
+                treeAppleLoader.draw();
+                glColor3f(1.0f, 0.9f, 0.1f);
+                treeAppleStarLoader.draw();
+                glEnable(GL_CULL_FACE);
             glPopMatrix();
         }
     }
-    glDisable(GL_COLOR_MATERIAL);
+    glPopAttrib();
 }
