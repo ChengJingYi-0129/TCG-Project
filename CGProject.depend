@@ -109,7 +109,7 @@
 	<iostream>
 	<GL/glut.h>
 
-1779980302 h:\tcg\tcg project\thirono.hpp
+1780038295 h:\tcg\tcg project\thirono.hpp
 	"CGLabmain.hpp"
 	"THironoSkill.hpp"
 	"skill.hpp"
@@ -120,7 +120,7 @@
 1779905575 h:\tcg\tcg project\thironoskill.hpp
 	<string>
 
-1779961799 source:h:\tcg\tcg project\thirono.cpp
+1780038561 source:h:\tcg\tcg project\thirono.cpp
 	<GL/glut.h>
 	<fstream>
 	<sstream>
@@ -139,7 +139,7 @@
 	"THirono.hpp"
 	"skill.hpp"
 
-1780034467 source:h:\tcg\tcg project\thironobattle.cpp
+1780038668 source:h:\tcg\tcg project\thironobattle.cpp
 	<GL/glut.h>
 	<windows.h>
 	<cmath>
@@ -172,7 +172,7 @@
 	<string>
 	<vector>
 
-1780035212 source:h:\tcg\tcg project\skill.cpp
+1780038295 source:h:\tcg\tcg project\skill.cpp
 	<GL/glut.h>
 	<string>
 	<fstream>

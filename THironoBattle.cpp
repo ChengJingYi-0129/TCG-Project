@@ -117,8 +117,8 @@ void MyVirtualWorld::tickTime()
     }
     lastTickTimeMs = currentTimeMs;
 
-    vfxWorld.tickTime();
-
+    vfxWorldP1.tickTime();
+    vfxWorldP2.tickTime();
 
     if (p1Skill1Active) {
         p1Skill1Timer -= deltaSeconds;
@@ -309,7 +309,7 @@ bool MyVirtualWorld::handleKeyDown(unsigned char key)
             if (currentScene == SCENE_BATTLE && !battlePaused && !battleEnded && p1Skill2CD <= 0.0f) {
                 p1Skill2Active = true; p1Skill2Timer = 2.5f; p1Skill2CD = 7.0f;
                 p1Skill2HasHit = false;
-                vfxWorld.treeScale = 0.0f; vfxWorld.fallAngle = 0.0f; vfxWorld.fallSpeed = 0.0f;
+                vfxWorldP1.treeScale = 0.0f; vfxWorldP1.fallAngle = 0.0f; vfxWorldP1.fallSpeed = 0.0f;
                 float angleRad = player1Character.getFacingAngle() * 3.14159265f / 180.0f;
                 p1Skill2PosX = player1Character.getPositionX() + sinf(angleRad) * 3.0f;
                 p1Skill2PosZ = player1Character.getPositionZ() + cosf(angleRad) * 3.0f;
@@ -408,7 +408,7 @@ bool MyVirtualWorld::handleKeyDown(unsigned char key)
            if (currentScene == SCENE_BATTLE && !battlePaused && !battleEnded && p2Skill1CD <= 0.0f) {
                 p2Skill1Active = true; p2Skill1Timer = 2.0f; p2Skill1CD = 3.5f;
                 p2Skill1TickTimer = 0.0f;
-                vfxWorld.animationStartTime = glutGet(GLUT_ELAPSED_TIME);
+                vfxWorldP2.animationStartTime = glutGet(GLUT_ELAPSED_TIME);
                 float angleRad = player2Character.getFacingAngle() * 3.14159265f / 180.0f;
                 p2Skill1PosX = player2Character.getPositionX() + sinf(angleRad) * 3.0f;
                 p2Skill1PosZ = player2Character.getPositionZ() + cosf(angleRad) * 3.0f;
@@ -554,7 +554,7 @@ void MyVirtualWorld::drawBattleScene()
         glPushMatrix(); glTranslatef(p1Skill1PosX, -4.0f, p1Skill1PosZ); glRotatef(p1Skill1Angle, 0.0f, 1.0f, 0.0f);
         glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT); glDisable(GL_LIGHTING); glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glColor4f(1.0f, 0.0f, 0.0f, 0.22f); glBegin(GL_TRIANGLE_FAN); glVertex3f(0.0f, 0.02f, 0.0f); for (int i=0; i<=360; i+=15) glVertex3f(sinf(i*3.14f/180.0f)*3.0f, 0.02f, cosf(i*3.14f/180.0f)*3.0f); glEnd(); glPopAttrib();
-        vfxWorld.draw(true, 1);
+        vfxWorldP1.draw(true, 1);
         glPopMatrix();
     }
 
@@ -564,7 +564,7 @@ void MyVirtualWorld::drawBattleScene()
         glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT); glDisable(GL_LIGHTING); glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glColor4f(1.0f, 0.0f, 0.0f, 0.25f); glBegin(GL_QUADS); glVertex3f(-4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, 18.0f); glVertex3f(-4.0f, 0.02f, 18.0f); glEnd();
         glLineWidth(2.5f); glColor4f(1.0f, 0.0f, 0.0f, 0.75f); glBegin(GL_LINE_LOOP); glVertex3f(-4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, 18.0f); glVertex3f(-4.0f, 0.02f, 18.0f); glEnd(); glPopAttrib();
-        vfxWorld.draw(true, 2);
+        vfxWorldP1.draw(true, 2);
 
         glPopMatrix();
     }
@@ -575,7 +575,7 @@ void MyVirtualWorld::drawBattleScene()
         glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT); glDisable(GL_LIGHTING); glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glColor4f(1.0f, 0.0f, 0.0f, 0.25f); glBegin(GL_QUADS); glVertex3f(-4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, 18.0f); glVertex3f(-4.0f, 0.02f, 18.0f); glEnd();
         glLineWidth(2.5f); glColor4f(1.0f, 0.0f, 0.0f, 0.75f); glBegin(GL_LINE_LOOP); glVertex3f(-4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, 18.0f); glVertex3f(-4.0f, 0.02f, 18.0f); glEnd(); glPopAttrib();
-        vfxWorld.draw(false, 1);
+        vfxWorldP2.draw(false, 1);
         glPopMatrix();
     }
 
@@ -586,7 +586,7 @@ void MyVirtualWorld::drawBattleScene()
         glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT); glDisable(GL_LIGHTING); glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glColor4f(1.0f, 0.0f, 0.0f, 0.25f); glBegin(GL_TRIANGLE_FAN); glVertex3f(0.0f, 0.02f, 0.0f); for (int i=0; i<=360; i+=12) glVertex3f(sinf(i*3.14159f/180.0f)*radius, 0.02f, cosf(i*3.14159f/180.0f)*radius); glEnd();
         glLineWidth(2.5f); glColor4f(1.0f, 0.0f, 0.0f, 0.75f); glBegin(GL_LINE_LOOP); for (int i=0; i<=360; i+=12) glVertex3f(sinf(i*3.14159f/180.0f)*radius, 0.02f, cosf(i*3.14159f/180.0f)*radius); glEnd(); glPopAttrib();
-        vfxWorld.draw(false, 2);
+        vfxWorldP2.draw(false, 2);
         glPopMatrix();
     }
 

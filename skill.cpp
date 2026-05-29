@@ -151,7 +151,6 @@ void MyVirtualWorld::draw(bool attackerIsPlayer1, int skillIndex)
                 glColor3f(0.9f, 0.2f, 0.2f); roseloader.draw();
             glPopMatrix();
         }
-        treeScale = fallAngle = fallSpeed = 0.0f;
     }
     else
     {
@@ -239,6 +238,7 @@ void MyVirtualWorld::draw(bool attackerIsPlayer1, int skillIndex)
                         glEnable(GL_CULL_FACE);
                     glPopMatrix();
                 glPopMatrix();
+            glPopMatrix();
         }
     }
     glPopAttrib();

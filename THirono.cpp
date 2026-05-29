@@ -90,7 +90,8 @@ MyVirtualWorld::MyVirtualWorld()
 void MyVirtualWorld::init()
 {
     arena.init();
-    vfxWorld.init();
+    vfxWorldP1.init();
+    vfxWorldP2.init();
     loadBattleHistory();
     if (!gPreviewCharactersInitialized)
     {

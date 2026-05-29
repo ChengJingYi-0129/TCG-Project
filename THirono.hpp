@@ -150,7 +150,8 @@ public:
     int lastTickTimeMs;
 
 
-    skill::MyVirtualWorld vfxWorld;
+    skill::MyVirtualWorld vfxWorldP1;
+    skill::MyVirtualWorld vfxWorldP2;
 
     bool p1Skill1Active = false, p1Skill2Active = false;
     float p1Skill1Timer = 0.0f, p1Skill2Timer = 0.0f;
