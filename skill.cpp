@@ -108,18 +108,26 @@ void MyVirtualWorld::draw(bool attackerIsPlayer1, int skillIndex)
     {
         if (skillIndex != 2) // P2 vine_spike
         {
-
             for (int j = 0; j < 5; j++)
             {
                 glPushMatrix();
                     glTranslatef(-4.0f + (j * 1.5f), 0.0f, 0.0f);
 
-                    for (int i = 0; i < 7   ; i++) {
+                    for (int i = 0; i < 7; i++) {
                         glPushMatrix();
-                            float animPhase = max(0.0f, float(sin(currentTime * 5.0f - i * 0.4f)));
-                            float thrustDist = animPhase * 4.0f;
+
+                            float randomPhase = sin(i * 12.5f + j * 7.3f) * 3.14159f;
+
+                            float randomSpeed = 8.0f + abs(cos(i * 5.1f + j * 9.2f)) * 8.0f;
+
+                            float localTime = (currentTime * randomSpeed) + randomPhase;
+                            float animPhase = max(0.0f, float(sin(localTime)));
+
+                            float randomHeight = 4.0f + abs(sin(i * j * 3.14f)) * 1.5f;
+                            float thrustDist = animPhase * randomHeight;
 
                             glTranslatef(0.0f, thrustDist * 0.7f, -1.0f + (i * 2.25f) + thrustDist * 0.7f);
+
                             glRotatef(-140.0f, 1.0f, 0.0f, 0.0f);
 
                             glScalef(2.0f, 2.0f, 2.0f);
@@ -135,8 +143,10 @@ void MyVirtualWorld::draw(bool attackerIsPlayer1, int skillIndex)
         else // P2 vines_tornado
         {
             glPushMatrix();
+                glScalef(2.0f, 2.0f, 2.0f);
                 glRotatef(tornadoAngle, 0.0f, 1.0f, 0.0f);
-                glColor3f(0.6f, 0.8f, 0.9f); tornadoloader.draw();
+
+                glColor3f(0.7f, 0.7f, 0.7f); tornadoloader.draw();
                 glColor3f(0.1f, 0.5f, 0.1f); tornadoVineLoader.draw();
                 glColor3f(0.9f, 0.2f, 0.2f); roseloader.draw();
             glPopMatrix();
@@ -200,26 +210,35 @@ void MyVirtualWorld::draw(bool attackerIsPlayer1, int skillIndex)
                 }
             }
 
-
-
             glPushMatrix();
 
                 glRotatef(fallAngle, 1.0f, 0.0f, 0.0f);
                 glScalef(treeScale, treeScale, treeScale);
-                glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
-                glScalef(2.0f, 2.0f, 2.0f);
+                glScalef(0.3f, 0.3f, 0.3f);
 
-                glColor3f(0.45f, 0.25f, 0.08f);
-                treeLogLoader.draw();
-                glDisable(GL_CULL_FACE);
-                glColor3f(0.15f, 0.6f, 0.15f);
-                treeLeafLoader.draw();
-                glColor3f(1.0f, 0.1f, 0.2f);
-                treeAppleLoader.draw();
-                glColor3f(1.0f, 0.9f, 0.1f);
-                treeAppleStarLoader.draw();
-                glEnable(GL_CULL_FACE);
-            glPopMatrix();
+                glPushMatrix();
+                    glColor3f(0.45f, 0.25f, 0.08f);
+                    treeLogLoader.draw();
+                glPopMatrix();
+
+                glPushMatrix();
+                    glPushMatrix();
+                        glScalef(1.0f, 1.0f, 1.0f);
+                        glDisable(GL_CULL_FACE);
+                        glColor3f(0.15f, 0.6f, 0.15f);
+                        treeLeafLoader.draw();
+                        glEnable(GL_CULL_FACE);
+                    glPopMatrix();
+
+                    glPushMatrix();
+                        glScalef(2.5f, 2.5f, 2.5f);
+                        glTranslatef(0.5f, 0.5f, 0.0f);
+                        glDisable(GL_CULL_FACE);
+                        glColor3f(1.0f, 0.1f, 0.2f);
+                        treeAppleLoader.draw();
+                        glEnable(GL_CULL_FACE);
+                    glPopMatrix();
+                glPopMatrix();
         }
     }
     glPopAttrib();

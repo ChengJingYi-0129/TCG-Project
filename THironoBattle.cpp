@@ -408,6 +408,7 @@ bool MyVirtualWorld::handleKeyDown(unsigned char key)
            if (currentScene == SCENE_BATTLE && !battlePaused && !battleEnded && p2Skill1CD <= 0.0f) {
                 p2Skill1Active = true; p2Skill1Timer = 2.0f; p2Skill1CD = 3.5f;
                 p2Skill1TickTimer = 0.0f;
+                vfxWorld.animationStartTime = glutGet(GLUT_ELAPSED_TIME);
                 float angleRad = player2Character.getFacingAngle() * 3.14159265f / 180.0f;
                 p2Skill1PosX = player2Character.getPositionX() + sinf(angleRad) * 3.0f;
                 p2Skill1PosZ = player2Character.getPositionZ() + cosf(angleRad) * 3.0f;
@@ -564,6 +565,7 @@ void MyVirtualWorld::drawBattleScene()
         glColor4f(1.0f, 0.0f, 0.0f, 0.25f); glBegin(GL_QUADS); glVertex3f(-4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, 18.0f); glVertex3f(-4.0f, 0.02f, 18.0f); glEnd();
         glLineWidth(2.5f); glColor4f(1.0f, 0.0f, 0.0f, 0.75f); glBegin(GL_LINE_LOOP); glVertex3f(-4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, 18.0f); glVertex3f(-4.0f, 0.02f, 18.0f); glEnd(); glPopAttrib();
         vfxWorld.draw(true, 2);
+
         glPopMatrix();
     }
 

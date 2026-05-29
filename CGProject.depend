@@ -139,7 +139,7 @@
 	"THirono.hpp"
 	"skill.hpp"
 
-1779979343 source:h:\tcg\tcg project\thironobattle.cpp
+1780034467 source:h:\tcg\tcg project\thironobattle.cpp
 	<GL/glut.h>
 	<windows.h>
 	<cmath>
@@ -167,12 +167,12 @@
 	"THironoSkill.hpp"
 	"skill.hpp"
 
-1779981077 h:\tcg\tcg project\skill.hpp
+1779981091 h:\tcg\tcg project\skill.hpp
 	<GL/glut.h>
 	<string>
 	<vector>
 
-1779980029 source:h:\tcg\tcg project\skill.cpp
+1780035212 source:h:\tcg\tcg project\skill.cpp
 	<GL/glut.h>
 	<string>
 	<fstream>
