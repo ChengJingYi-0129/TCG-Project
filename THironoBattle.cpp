@@ -132,7 +132,7 @@ void MyVirtualWorld::tickTime()
         if (p1Skill1TickTimer <= 0.0f) {
             float dx = player2Character.getPositionX() - p1Skill1PosX;
             float dz = player2Character.getPositionZ() - p1Skill1PosZ;
-            if (sqrt(dx*dx + dz*dz) <= 3.0f) {
+            if (sqrt(dx*dx + dz*dz) <= 4.0f) {
                 player2Health -= 4;
                 p1Skill1TickTimer = 0.4f;
                 resolveBattleIfNeeded();
@@ -549,47 +549,50 @@ void MyVirtualWorld::drawBattleScene()
     player1Character.draw();
     player2Character.draw();
 
+
     if (p1Skill1Active)
     {
-        glPushMatrix(); glTranslatef(p1Skill1PosX, -4.0f, p1Skill1PosZ); glRotatef(p1Skill1Angle, 0.0f, 1.0f, 0.0f);
-        glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT); glDisable(GL_LIGHTING); glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glColor4f(1.0f, 0.0f, 0.0f, 0.22f); glBegin(GL_TRIANGLE_FAN); glVertex3f(0.0f, 0.02f, 0.0f); for (int i=0; i<=360; i+=15) glVertex3f(sinf(i*3.14f/180.0f)*3.0f, 0.02f, cosf(i*3.14f/180.0f)*3.0f); glEnd(); glPopAttrib();
+        glPushMatrix();
+        glTranslatef(p1Skill1PosX, -4.0f, p1Skill1PosZ);
+        glRotatef(p1Skill1Angle, 0.0f, 1.0f, 0.0f);
+
         vfxWorldP1.draw(true, 1);
         glPopMatrix();
     }
 
     if (p1Skill2Active)
     {
-        glPushMatrix(); glTranslatef(p1Skill2PosX, -4.0f, p1Skill2PosZ); glRotatef(p1Skill2Angle, 0.0f, 1.0f, 0.0f);
-        glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT); glDisable(GL_LIGHTING); glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glColor4f(1.0f, 0.0f, 0.0f, 0.25f); glBegin(GL_QUADS); glVertex3f(-4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, 18.0f); glVertex3f(-4.0f, 0.02f, 18.0f); glEnd();
-        glLineWidth(2.5f); glColor4f(1.0f, 0.0f, 0.0f, 0.75f); glBegin(GL_LINE_LOOP); glVertex3f(-4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, 18.0f); glVertex3f(-4.0f, 0.02f, 18.0f); glEnd(); glPopAttrib();
+        glPushMatrix();
+        glTranslatef(p1Skill2PosX, -4.0f, p1Skill2PosZ);
+        glRotatef(p1Skill2Angle, 0.0f, 1.0f, 0.0f);
+
         vfxWorldP1.draw(true, 2);
 
         glPopMatrix();
     }
 
+
     if (p2Skill1Active)
     {
-        glPushMatrix(); glTranslatef(p2Skill1PosX, -4.0f, p2Skill1PosZ); glRotatef(p2Skill1Angle, 0.0f, 1.0f, 0.0f);
-        glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT); glDisable(GL_LIGHTING); glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glColor4f(1.0f, 0.0f, 0.0f, 0.25f); glBegin(GL_QUADS); glVertex3f(-4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, 18.0f); glVertex3f(-4.0f, 0.02f, 18.0f); glEnd();
-        glLineWidth(2.5f); glColor4f(1.0f, 0.0f, 0.0f, 0.75f); glBegin(GL_LINE_LOOP); glVertex3f(-4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, -2.0f); glVertex3f(4.0f, 0.02f, 18.0f); glVertex3f(-4.0f, 0.02f, 18.0f); glEnd(); glPopAttrib();
+        glPushMatrix();
+        glTranslatef(p2Skill1PosX, -4.0f, p2Skill1PosZ);
+        glRotatef(p2Skill1Angle, 0.0f, 1.0f, 0.0f);
+
         vfxWorldP2.draw(false, 1);
+
         glPopMatrix();
     }
 
     if (p2Skill2Active)
     {
-        glPushMatrix(); glTranslatef(p2Skill2PosX, -4.0f, p2Skill2PosZ); glRotatef(p2Skill2Angle, 0.0f, 1.0f, 0.0f);
-        float radius = 4.0f;
-        glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT); glDisable(GL_LIGHTING); glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glColor4f(1.0f, 0.0f, 0.0f, 0.25f); glBegin(GL_TRIANGLE_FAN); glVertex3f(0.0f, 0.02f, 0.0f); for (int i=0; i<=360; i+=12) glVertex3f(sinf(i*3.14159f/180.0f)*radius, 0.02f, cosf(i*3.14159f/180.0f)*radius); glEnd();
-        glLineWidth(2.5f); glColor4f(1.0f, 0.0f, 0.0f, 0.75f); glBegin(GL_LINE_LOOP); for (int i=0; i<=360; i+=12) glVertex3f(sinf(i*3.14159f/180.0f)*radius, 0.02f, cosf(i*3.14159f/180.0f)*radius); glEnd(); glPopAttrib();
+        glPushMatrix();
+        glTranslatef(p2Skill2PosX, -4.0f, p2Skill2PosZ);
+        glRotatef(p2Skill2Angle, 0.0f, 1.0f, 0.0f);
+
         vfxWorldP2.draw(false, 2);
+
         glPopMatrix();
     }
-
 
     const int width = glutGet(GLUT_WINDOW_WIDTH);
     const int height = glutGet(GLUT_WINDOW_HEIGHT);

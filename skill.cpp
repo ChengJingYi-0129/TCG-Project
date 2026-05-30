@@ -77,8 +77,7 @@ void MyVirtualWorld::resetSkill()
 void MyVirtualWorld::init()
 {
    myVine.load("data/vine.txt", 1.0);
-   myVineSpikes.load("data/vine_spikes.txt", 1.0);
-   myVineRoses.load("data/vine_roses.txt", 1.0);
+   myVineLeaf.load("data/vine_leaf.txt", 1.0);
    tornadoloader.load("data/tornado_2.txt", 3.0);
    roseloader.load("data/tornado_rose.txt", 3.0);
    tornadoVineLoader.load("data/tornado_vine.txt", 3.0);
@@ -87,7 +86,6 @@ void MyVirtualWorld::init()
    treeLogLoader.load("data/tree_log.txt", 1.0);
    treeLeafLoader.load("data/tree_leaf.txt", 1.0);
    treeAppleLoader.load("data/tree_apple.txt", 1.0);
-   treeAppleStarLoader.load("data/tree_apple_star.txt", 1.0);
 
    vfxAngle = tornadoAngle = roseAngle = 0.0f;
    warningAlpha = fallAngle = fallSpeed = treeScale = 0.0f;
@@ -106,39 +104,76 @@ void MyVirtualWorld::draw(bool attackerIsPlayer1, int skillIndex)
 
     if (!attackerIsPlayer1)
     {
-        if (skillIndex != 2) // P2 vine_spike
+       if (skillIndex != 2) // P2 vine_spike
         {
-            for (int j = 0; j < 5; j++)
-            {
-                glPushMatrix();
-                    glTranslatef(-4.0f + (j * 1.5f), 0.0f, 0.0f);
+            float startX = -3.6f;
+            float endX = 3.6f;
+            float startZ = -1.5f;
+            float endZ = 15.5f;
 
-                    for (int i = 0; i < 7; i++) {
-                        glPushMatrix();
 
-                            float randomPhase = sin(i * 12.5f + j * 7.3f) * 3.14159f;
+            int vineCountX = 15;
+            int vineCountZ = 25;
 
-                            float randomSpeed = 8.0f + abs(cos(i * 5.1f + j * 9.2f)) * 8.0f;
+            glDisable(GL_CULL_FACE);
 
-                            float localTime = (currentTime * randomSpeed) + randomPhase;
-                            float animPhase = max(0.0f, float(sin(localTime)));
+            for(int i = 0; i < vineCountX; i++) {
+                for(int j = 0; j < vineCountZ; j++) {
+                    glPushMatrix();
 
-                            float randomHeight = 4.0f + abs(sin(i * j * 3.14f)) * 1.5f;
-                            float thrustDist = animPhase * randomHeight;
+                    float posX = startX + (endX - startX) * ((float)i / (vineCountX - 1));
+                    float posZ = startZ + (endZ - startZ) * ((float)j / (vineCountZ - 1));
 
-                            glTranslatef(0.0f, thrustDist * 0.7f, -1.0f + (i * 2.25f) + thrustDist * 0.7f);
+                    float seed = (float)i * 17.3f + (float)j * 29.1f;
 
-                            glRotatef(-140.0f, 1.0f, 0.0f, 0.0f);
+                    posX += sin(seed * 4.3f) * 0.25f;
+                    posZ += cos(seed * 3.7f) * 0.5f;
 
-                            glScalef(2.0f, 2.0f, 2.0f);
+                    // 3. 基础缩放 (生成大小不一的随机感)
+                    float baseScale = 1.0f + fabs(sin(seed * 5.1f)) * 1.5f;
 
-                            glColor3f(0.1f, 0.5f, 0.1f); myVine.draw();
-                            glColor3f(0.6f, 0.4f, 0.2f); myVineSpikes.draw();
-                            glColor3f(0.9f, 0.1f, 0.3f); myVineRoses.draw();
-                        glPopMatrix();
-                    }
-                glPopMatrix();
+                    float t = currentTime * 5.0f;
+                    float phase = (float)i * 3.14159f + (float)j * 0.3f + sin(seed) * 1.5f;
+                    float whipAngle = sin(t + phase) * 35.0f;
+                    float sideSway = cos(t * 0.8f + phase) * 4.0f;
+                    float dynamicStretch = 1.0f + sin(t + phase + 1.57f) * 0.15f;
+
+                    glTranslatef(posX, 0.0f, posZ);
+
+                    glRotatef(whipAngle, 1.0f, 0.0f, 0.0f);
+                    glRotatef(sideSway, 0.0f, 0.0f, 1.0f);
+
+                    // --- 默认模型变换 ---
+                    glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+                    glTranslatef(0.0f, 0.5f, 0.0f);
+                    // -------------------------
+
+                    // ==========================================
+                    // 🌟 【核心修改：整体模型巨大化】 🌟
+                    // 觉得不够大就改成 4.0f、5.0f，觉得太大就改成 2.0f
+                    float modelSizeMultiplier = 3.0f;
+
+                    // 应用缩放（基础大小 * 甩动拉伸 * 巨大化倍数）
+                    glScalef(baseScale * modelSizeMultiplier,
+                             dynamicStretch * baseScale * modelSizeMultiplier,
+                             baseScale * modelSizeMultiplier);
+                    // ==========================================
+
+                    // 双模型上色渲染
+                    // 1. 画藤蔓主体（极暗的深棕/黑色）
+                    glColor3f(0.09f, 0.07f, 0.06f);
+                    myVine.draw();
+
+                    // 2. 画藤蔓的叶子（深邃的暗绿色）
+                    glColor3f(0.15f, 0.35f, 0.15f);
+                    myVineLeaf.draw();
+
+                    glPopMatrix();
+                }
             }
+
+            // 画完恢复背面剔除状态
+            glEnable(GL_CULL_FACE);
         }
         else // P2 vines_tornado
         {

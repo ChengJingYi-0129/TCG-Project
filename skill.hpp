@@ -28,8 +28,7 @@ class MyVirtualWorld
 public:
 
     MyModelLoader myVine;
-    MyModelLoader myVineSpikes;
-    MyModelLoader myVineRoses;
+    MyModelLoader myVineLeaf;
     MyModelLoader tornadoloader;
     MyModelLoader roseloader;
     MyModelLoader tornadoVineLoader;
@@ -39,6 +38,7 @@ public:
     MyModelLoader treeLeafLoader;
     MyModelLoader treeAppleLoader;
     MyModelLoader treeAppleStarLoader;
+
 
     float vfxAngle;
     float tornadoAngle;
