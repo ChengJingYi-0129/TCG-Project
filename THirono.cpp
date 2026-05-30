@@ -103,8 +103,9 @@ void MyVirtualWorld::init()
     player2Character = gCharacter2Preview;
     player1Character.resetPosition();
     player2Character.resetPosition();
-    player1Character.moveByInput(-10.0f, 0.0f, 1.0f);
-    player2Character.moveByInput(10.0f, 0.0f, 1.0f);
+    // P1 on the left facing right (+X), P2 on the right facing left (-X)
+    player1Character.setPosition(-18.0f, 0.0f, 90.0f);
+    player2Character.setPosition(18.0f, 0.0f, -90.0f);
     lastTickTimeMs = glutGet(GLUT_ELAPSED_TIME);
 }
 
@@ -254,11 +255,18 @@ void MyVirtualWorld::drawCharacterSelectScene()
         drawBitmapText(85.0f, height - 125.0f, GLUT_BITMAP_HELVETICA_18, "Player 2: LEFT/RIGHT to switch, ENTER to confirm.");
 
     const int activeIndex = selectingPlayer == 1 ? player1SelectedCharacterIndex : player2SelectedCharacterIndex;
-    drawOverlayPanel(180.0f + activeIndex * 380.0f, 45.0f,
-                     420.0f + activeIndex * 380.0f, 95.0f,
-                     0.96f, 0.78f, 0.18f, 0.85f);
+    // Left label (Twinkle-Twinkle) - yellow if selected, white if not
+    if (activeIndex == 0)
+        drawOverlayPanel(static_cast<float>(width / 2) - 340.0f, 45.0f, static_cast<float>(width / 2) - 100.0f, 95.0f, 0.96f, 0.78f, 0.18f, 0.95f);
+    else
+        drawOverlayPanel(static_cast<float>(width / 2) - 340.0f, 45.0f, static_cast<float>(width / 2) - 100.0f, 95.0f, 1.0f, 1.0f, 1.0f, 0.95f);
+    // Right label (Hirono) - yellow if selected, white if not
+    if (activeIndex == 1)
+        drawOverlayPanel(static_cast<float>(width / 2) + 100.0f, 45.0f, static_cast<float>(width / 2) + 340.0f, 95.0f, 0.96f, 0.78f, 0.18f, 0.95f);
+    else
+        drawOverlayPanel(static_cast<float>(width / 2) + 100.0f, 45.0f, static_cast<float>(width / 2) + 340.0f, 95.0f, 1.0f, 1.0f, 1.0f, 0.95f);
     glColor3f(0.07f, 0.06f, 0.04f);
-    drawBitmapText(220.0f, 63.0f, GLUT_BITMAP_HELVETICA_18, "Twinkle-Twinkle");
-    drawBitmapText(640.0f, 63.0f, GLUT_BITMAP_HELVETICA_18, "Hirono");
+    drawBitmapText(static_cast<float>(width / 2) - 330.0f, 63.0f, GLUT_BITMAP_HELVETICA_18, "Twinkle-Twinkle");
+    drawBitmapText(static_cast<float>(width / 2) + 110.0f, 63.0f, GLUT_BITMAP_HELVETICA_18, "Hirono");
     endScreenOverlay();
 }

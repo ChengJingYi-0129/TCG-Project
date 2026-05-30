@@ -55,6 +55,7 @@ ProjectCharacter::ProjectCharacter(const std::string& prefix)
     , movingBackward(false)
     , movingLeft(false)
     , movingRight(false)
+    , sprintEnabled(false)
     , activeVariant(0)
     , assetPrefix(prefix)
 {
@@ -336,6 +337,14 @@ void ProjectCharacter::setMovingForward(bool active) { movingForward = active; }
 void ProjectCharacter::setMovingBackward(bool active) { movingBackward = active; }
 void ProjectCharacter::setMovingLeft(bool active) { movingLeft = active; }
 void ProjectCharacter::setMovingRight(bool active) { movingRight = active; }
+void ProjectCharacter::setSprintEnabled(bool enabled) { sprintEnabled = enabled; }
+
+void ProjectCharacter::setPosition(float x, float z, float facingAngle)
+{
+    positionX = clampValue(x, -28.0f, 28.0f);
+    positionZ = clampValue(z, -28.0f, 28.0f);
+    facingAngleDegrees = facingAngle;
+}
 
 void ProjectCharacter::moveByInput(float inputX, float inputZ, float distanceScale)
 {
@@ -378,7 +387,7 @@ void ProjectCharacter::update(float deltaSeconds)
     {
         moveX /= inputLength;
         moveZ /= inputLength;
-        const float moveSpeed = 7.0f;
+        const float moveSpeed = sprintEnabled ? 16.0f : 7.0f;
         positionX += moveX * moveSpeed * deltaSeconds;
         positionZ += moveZ * moveSpeed * deltaSeconds;
         positionX = clampValue(positionX, -28.0f, 28.0f);

@@ -180,3 +180,90 @@
 	<algorithm>
 	"skill.hpp"
 
+1779905879 source:c:\users\asus\documents\github\tcg-project\cglabmain.cpp
+	"CGLabxx.hpp"
+	<cstdlib>
+	<iostream>
+	<iomanip>
+	<cmath>
+	<GL/glut.h>
+	"CGLabmain.hpp"
+	"THirono.hpp"
+
+1779905879 c:\users\asus\documents\github\tcg-project\cglabmain.hpp
+	<string>
+	<cmath>
+	<iostream>
+	<GL/glut.h>
+
+1780155726 c:\users\asus\documents\github\tcg-project\thirono.hpp
+	"CGLabmain.hpp"
+	"THironoSkill.hpp"
+	"skill.hpp"
+	<string>
+	<vector>
+	<cmath>
+
+1779905879 c:\users\asus\documents\github\tcg-project\thironoskill.hpp
+	<string>
+
+1780151191 c:\users\asus\documents\github\tcg-project\skill.hpp
+	<GL/glut.h>
+	<string>
+	<vector>
+
+1780151191 source:c:\users\asus\documents\github\tcg-project\skill.cpp
+	<GL/glut.h>
+	<string>
+	<fstream>
+	<cmath>
+	<algorithm>
+	"skill.hpp"
+
+1780155214 source:c:\users\asus\documents\github\tcg-project\thirono.cpp
+	<GL/glut.h>
+	<fstream>
+	<sstream>
+	<string>
+	<vector>
+	"THirono.hpp"
+	"skill.hpp"
+
+1780039316 source:c:\users\asus\documents\github\tcg-project\thironoarena.cpp
+	<GL/glut.h>
+	<windows.h>
+	<gdiplus.h>
+	<cmath>
+	<ctime>
+	<vector>
+	"THirono.hpp"
+	"skill.hpp"
+
+1780155214 source:c:\users\asus\documents\github\tcg-project\thironobattle.cpp
+	<GL/glut.h>
+	<windows.h>
+	<cmath>
+	<fstream>
+	<iomanip>
+	<sstream>
+	<string>
+	"THirono.hpp"
+	"skill.hpp"
+
+1780155214 source:c:\users\asus\documents\github\tcg-project\thironocharacter.cpp
+	<algorithm>
+	<cmath>
+	<fstream>
+	<iomanip>
+	<iostream>
+	<limits>
+	<sstream>
+	"THirono.hpp"
+	"skill.hpp"
+
+1780039316 source:c:\users\asus\documents\github\tcg-project\thironoskill.cpp
+	<cmath>
+	"THirono.hpp"
+	"THironoSkill.hpp"
+	"skill.hpp"
+

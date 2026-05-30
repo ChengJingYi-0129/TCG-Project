@@ -69,6 +69,8 @@ public:
     void setMovingBackward(bool active);
     void setMovingLeft(bool active);
     void setMovingRight(bool active);
+    void setPosition(float x, float z, float facingAngle);
+    void setSprintEnabled(bool enabled);
     void moveByInput(float inputX, float inputZ, float distanceScale);
     void update(float deltaSeconds);
     const char* getCharacterName() const;
@@ -119,6 +121,7 @@ private:
     bool movingBackward;
     bool movingLeft;
     bool movingRight;
+    bool sprintEnabled;
     int activeVariant;
     std::string assetPrefix;
 

@@ -216,10 +216,12 @@ void MyVirtualWorld::tickTime()
         player1Character.setMovingBackward((GetAsyncKeyState('S') & 0x8000) != 0);
         player1Character.setMovingLeft((GetAsyncKeyState('A') & 0x8000) != 0);
         player1Character.setMovingRight((GetAsyncKeyState('D') & 0x8000) != 0);
+        player1Character.setSprintEnabled((GetAsyncKeyState(VK_LSHIFT) & 0x8000) != 0);
         player2Character.setMovingForward((GetAsyncKeyState(VK_UP) & 0x8000) != 0);
         player2Character.setMovingBackward((GetAsyncKeyState(VK_DOWN) & 0x8000) != 0);
         player2Character.setMovingLeft((GetAsyncKeyState(VK_LEFT) & 0x8000) != 0);
         player2Character.setMovingRight((GetAsyncKeyState(VK_RIGHT) & 0x8000) != 0);
+        player2Character.setSprintEnabled((GetAsyncKeyState(VK_RCONTROL) & 0x8000) != 0);
         player1Character.update(deltaSeconds);
         player2Character.update(deltaSeconds);
         resolveBattleIfNeeded();
@@ -252,8 +254,8 @@ bool MyVirtualWorld::handleKeyDown(unsigned char key)
                     player2Character = (player2SelectedCharacterIndex == 0) ? gCharacter1Preview : gCharacter2Preview;
                     player1Character.resetPosition();
                     player2Character.resetPosition();
-                    player1Character.moveByInput(-10.0f, 0.0f, 1.0f);
-                    player2Character.moveByInput(10.0f, 0.0f, 1.0f);
+                    player1Character.setPosition(-18.0f, 0.0f, 90.0f);
+                    player2Character.setPosition(18.0f, 0.0f, -90.0f);
                     player1Health = 100;
                     player2Health = 100;
                     matchTimeRemainingMs = 90000;
@@ -329,7 +331,6 @@ bool MyVirtualWorld::handleKeyDown(unsigned char key)
             {
                 if (battlePaused || battleEnded) return true;
                 player1Character.setMovingLeft(true);
-                player1Character.moveByInput(-1.0f, 0.0f, 1.0f);
                 return true;
             }
             return false;
@@ -346,7 +347,6 @@ bool MyVirtualWorld::handleKeyDown(unsigned char key)
             {
                 if (battlePaused || battleEnded) return true;
                 player1Character.setMovingRight(true);
-                player1Character.moveByInput(1.0f, 0.0f, 1.0f);
                 return true;
             }
             return false;
@@ -357,7 +357,6 @@ bool MyVirtualWorld::handleKeyDown(unsigned char key)
             {
                 if (battlePaused || battleEnded) return true;
                 player1Character.setMovingForward(true);
-                player1Character.moveByInput(0.0f, -1.0f, 1.0f);
                 return true;
             }
             return false;
@@ -368,7 +367,6 @@ bool MyVirtualWorld::handleKeyDown(unsigned char key)
             {
                 if (battlePaused || battleEnded) return true;
                 player1Character.setMovingBackward(true);
-                player1Character.moveByInput(0.0f, 1.0f, 1.0f);
                 return true;
             }
             return false;
@@ -462,24 +460,9 @@ bool MyVirtualWorld::handleSpecialKey(int key)
         {
             return true;
         }
-        if (key == GLUT_KEY_UP)
+        if (key == GLUT_KEY_UP || key == GLUT_KEY_DOWN ||
+            key == GLUT_KEY_LEFT || key == GLUT_KEY_RIGHT)
         {
-            player2Character.moveByInput(0.0f, -1.0f, 1.0f);
-            return true;
-        }
-        if (key == GLUT_KEY_DOWN)
-        {
-            player2Character.moveByInput(0.0f, 1.0f, 1.0f);
-            return true;
-        }
-        if (key == GLUT_KEY_LEFT)
-        {
-            player2Character.moveByInput(-1.0f, 0.0f, 1.0f);
-            return true;
-        }
-        if (key == GLUT_KEY_RIGHT)
-        {
-            player2Character.moveByInput(1.0f, 0.0f, 1.0f);
             return true;
         }
     }
@@ -657,7 +640,7 @@ void MyVirtualWorld::drawBattleScene()
     drawBitmapTextRight(width - 38.0f, height - 114.0f, GLUT_BITMAP_HELVETICA_12, p2HUD.str());
 
     glColor3f(1.0f, 0.95f, 0.55f);
-    drawBitmapText(width * 0.5f - 220.0f, height - 22.0f, GLUT_BITMAP_HELVETICA_18, "P: Pause    C: Continue    B: Back");
+    drawBitmapTextCentered(width * 0.5f, height - 22.0f, GLUT_BITMAP_HELVETICA_18, "P: Pause    C: Continue    B: Back");
     if (battlePaused)
     {
         drawOverlayPanel(width * 0.5f - 220.0f, height * 0.5f - 70.0f,
