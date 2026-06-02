@@ -254,8 +254,8 @@ bool MyVirtualWorld::handleKeyDown(unsigned char key)
                     player2Character = (player2SelectedCharacterIndex == 0) ? gCharacter1Preview : gCharacter2Preview;
                     player1Character.resetPosition();
                     player2Character.resetPosition();
-                    player1Character.setPosition(-18.0f, 0.0f, 90.0f);
-                    player2Character.setPosition(18.0f, 0.0f, -90.0f);
+                    player1Character.setPosition(-16.0f, 0.0f, 90.0f);
+                    player2Character.setPosition(16.0f, 0.0f, -90.0f);
                     player1Health = 100;
                     player2Health = 100;
                     matchTimeRemainingMs = 90000;

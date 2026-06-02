@@ -341,8 +341,8 @@ void ProjectCharacter::setSprintEnabled(bool enabled) { sprintEnabled = enabled;
 
 void ProjectCharacter::setPosition(float x, float z, float facingAngle)
 {
-    positionX = clampValue(x, -28.0f, 28.0f);
-    positionZ = clampValue(z, -28.0f, 28.0f);
+    positionX = clampValue(x, -25.0f, 25.0f);
+    positionZ = clampValue(z, -25.0f, 25.0f);
     facingAngleDegrees = facingAngle;
 }
 
@@ -360,8 +360,8 @@ void ProjectCharacter::moveByInput(float inputX, float inputZ, float distanceSca
     const float stepDistance = 0.9f * distanceScale;
     positionX += inputX * stepDistance;
     positionZ += inputZ * stepDistance;
-    positionX = clampValue(positionX, -28.0f, 28.0f);
-    positionZ = clampValue(positionZ, -28.0f, 28.0f);
+    positionX = clampValue(positionX, -25.0f, 25.0f);
+    positionZ = clampValue(positionZ, -25.0f, 25.0f);
     facingAngleDegrees = std::atan2(inputX, inputZ) * 180.0f / static_cast<float>(M_PI);
     walkCycle += 0.75f;
     movementBlend = 1.0f;
@@ -390,8 +390,8 @@ void ProjectCharacter::update(float deltaSeconds)
         const float moveSpeed = sprintEnabled ? 16.0f : 7.0f;
         positionX += moveX * moveSpeed * deltaSeconds;
         positionZ += moveZ * moveSpeed * deltaSeconds;
-        positionX = clampValue(positionX, -28.0f, 28.0f);
-        positionZ = clampValue(positionZ, -28.0f, 28.0f);
+        positionX = clampValue(positionX, -25.0f, 25.0f);
+        positionZ = clampValue(positionZ, -25.0f, 25.0f);
         facingAngleDegrees = std::atan2(moveX, moveZ) * 180.0f / static_cast<float>(M_PI);
         walkCycle += deltaSeconds * 11.0f;
         movementBlend = std::min(1.0f, movementBlend + deltaSeconds * 4.0f);

@@ -82,10 +82,10 @@ void ArenaPlatform::draw()
 
 void ArenaPlatform::drawArena()
 {
-    const GLfloat topRadius = 36.0f;
-    const GLfloat bodyRadius = 48.0f;
-    const GLfloat bodyRadiusY = 34.0f;
-    const GLfloat topCutY = 22.0f;
+    const GLfloat topRadius = 32.2f;
+    const GLfloat bodyRadius = 42.9f;
+    const GLfloat bodyRadiusY = 30.4f;
+    const GLfloat topCutY = 19.7f;
     const GLint slices = 64;
     const GLint stacks = 24;
 

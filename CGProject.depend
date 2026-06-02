@@ -229,7 +229,7 @@
 	"THirono.hpp"
 	"skill.hpp"
 
-1780039316 source:c:\users\asus\documents\github\tcg-project\thironoarena.cpp
+1780158112 source:c:\users\asus\documents\github\tcg-project\thironoarena.cpp
 	<GL/glut.h>
 	<windows.h>
 	<gdiplus.h>
@@ -239,7 +239,7 @@
 	"THirono.hpp"
 	"skill.hpp"
 
-1780155214 source:c:\users\asus\documents\github\tcg-project\thironobattle.cpp
+1780158112 source:c:\users\asus\documents\github\tcg-project\thironobattle.cpp
 	<GL/glut.h>
 	<windows.h>
 	<cmath>
@@ -250,7 +250,7 @@
 	"THirono.hpp"
 	"skill.hpp"
 
-1780155214 source:c:\users\asus\documents\github\tcg-project\thironocharacter.cpp
+1780158111 source:c:\users\asus\documents\github\tcg-project\thironocharacter.cpp
 	<algorithm>
 	<cmath>
 	<fstream>
