@@ -471,7 +471,7 @@ void ProjectCharacter::drawInternal(float baseX, float baseY, float baseZ, float
     glDisable(GL_CULL_FACE);
 
     const float armSwing = std::sin(walkCycle) * 28.0f * movementBlend;
-    const float legSwing = std::sin(walkCycle) * 22.0f * movementBlend;
+    const float legSwing = std::sin(walkCycle) * 14.0f * movementBlend;
     float tintR = 1.0f;
     float tintG = 1.0f;
     float tintB = 1.0f;

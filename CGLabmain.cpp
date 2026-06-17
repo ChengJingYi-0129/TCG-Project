@@ -332,7 +332,7 @@ void myLightingInit()
  static GLfloat position[] = {10.0f, 10.0f, 10.0f, 1.0f };
   short shininess = 128;
 
- glDisable(GL_LIGHTING);
+ glEnable(GL_LIGHTING);
  glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
  glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
  glLightfv(GL_LIGHT0, GL_SPECULAR, specular);

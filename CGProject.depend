@@ -180,7 +180,7 @@
 	<algorithm>
 	"skill.hpp"
 
-1779905879 source:c:\users\asus\documents\github\tcg-project\cglabmain.cpp
+1781688214 source:c:\users\asus\documents\github\tcg-project\cglabmain.cpp
 	"CGLabxx.hpp"
 	<cstdlib>
 	<iostream>
@@ -250,7 +250,7 @@
 	"THirono.hpp"
 	"skill.hpp"
 
-1780158111 source:c:\users\asus\documents\github\tcg-project\thironocharacter.cpp
+1781688189 source:c:\users\asus\documents\github\tcg-project\thironocharacter.cpp
 	<algorithm>
 	<cmath>
 	<fstream>
