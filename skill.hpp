@@ -47,6 +47,7 @@ public:
     float fallAngle;
     float fallSpeed;
     float treeScale;
+    long int treeFallStartTime;
     long int timeold, timenew, elapseTime;
 
     long int animationStartTime;

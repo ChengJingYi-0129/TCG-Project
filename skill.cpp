@@ -67,6 +67,7 @@ void MyVirtualWorld::resetSkill()
 {
     vfxAngle = tornadoAngle = roseAngle = 0.0f;
     warningAlpha = fallAngle = fallSpeed = treeScale = 0.0f;
+    treeFallStartTime = -1;
 
     timeold = glutGet(GLUT_ELAPSED_TIME);
     animationStartTime = glutGet(GLUT_ELAPSED_TIME);
@@ -89,6 +90,7 @@ void MyVirtualWorld::init()
 
    vfxAngle = tornadoAngle = roseAngle = 0.0f;
    warningAlpha = fallAngle = fallSpeed = treeScale = 0.0f;
+   treeFallStartTime = -1;
    timeold = glutGet(GLUT_ELAPSED_TIME);
    resetSkill();
 }
@@ -235,12 +237,16 @@ void MyVirtualWorld::draw(int characterIndex, int skillIndex)
                 treeScale += 0.8f;
                 if (treeScale > 1.0f) treeScale = 1.0f;
                 fallAngle = 0.0f;
+                treeFallStartTime = -1;
             }
             else {
-                if (fallAngle < 90.0f) {
-                    fallSpeed += 1.0f;
-                    fallAngle += fallSpeed;
-                } else {
+                if (treeFallStartTime < 0) {
+                    treeFallStartTime = glutGet(GLUT_ELAPSED_TIME);
+                }
+
+                const long int fallElapsed = glutGet(GLUT_ELAPSED_TIME) - treeFallStartTime;
+                fallAngle = fallElapsed * 0.25f;
+                if (fallAngle > 90.0f) {
                     fallAngle = 90.0f;
                 }
             }

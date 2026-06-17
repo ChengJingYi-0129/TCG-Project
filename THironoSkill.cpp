@@ -22,7 +22,7 @@ SkillDefinition SkillSystem::getCharacterSkill(int characterIndex, int skillInde
             skill.id = "character1_skill_h";
             skill.displayName = "Tree";
             skill.animationFile = "skills/character1/skill_h.txt";
-            skill.damage = 20;
+            skill.damage = 30;
             skill.range = 18.0f;
         }
         else
@@ -30,7 +30,7 @@ SkillDefinition SkillSystem::getCharacterSkill(int characterIndex, int skillInde
             skill.id = "character2_skill_qm";
             skill.displayName = "Tornado";
             skill.animationFile = "skills/character2/skill_qm.txt";
-            skill.damage = 20;
+            skill.damage = 30;
             skill.range = 18.0f;
         }
     }
@@ -41,7 +41,7 @@ SkillDefinition SkillSystem::getCharacterSkill(int characterIndex, int skillInde
             skill.id = "character1_skill_g";
             skill.displayName = "Apple";
             skill.animationFile = "skills/character1/skill_g.txt";
-            skill.damage = 12;
+            skill.damage = 25;
             skill.range = 12.0f;
         }
         else
@@ -49,7 +49,7 @@ SkillDefinition SkillSystem::getCharacterSkill(int characterIndex, int skillInde
             skill.id = "character2_skill_gt";
             skill.displayName = "Vine";
             skill.animationFile = "skills/character2/skill_gt.txt";
-            skill.damage = 12;
+            skill.damage = 16;
             skill.range = 12.0f;
         }
     }

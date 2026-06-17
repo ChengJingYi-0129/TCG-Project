@@ -64,6 +64,16 @@ ProjectCharacter::ProjectCharacter(const std::string& prefix)
     rightHand.loaded = false;
     leftFoot.loaded = false;
     rightFoot.loaded = false;
+    body.displayListId = 0;
+    leftHand.displayListId = 0;
+    rightHand.displayListId = 0;
+    leftFoot.displayListId = 0;
+    rightFoot.displayListId = 0;
+    body.faceNormals.clear();
+    leftHand.faceNormals.clear();
+    rightHand.faceNormals.clear();
+    leftFoot.faceNormals.clear();
+    rightFoot.faceNormals.clear();
 }
 
 void ProjectCharacter::init()
@@ -82,6 +92,7 @@ void ProjectCharacter::init()
         {
             computeBounds();
             resetPosition();
+            buildRenderCache();
         }
     }
 }
@@ -95,6 +106,16 @@ void ProjectCharacter::setAssetPrefix(const std::string& prefix)
     rightHand.loaded = false;
     leftFoot.loaded = false;
     rightFoot.loaded = false;
+    body.displayListId = 0;
+    leftHand.displayListId = 0;
+    rightHand.displayListId = 0;
+    leftFoot.displayListId = 0;
+    rightFoot.displayListId = 0;
+    body.faceNormals.clear();
+    leftHand.faceNormals.clear();
+    rightHand.faceNormals.clear();
+    leftFoot.faceNormals.clear();
+    rightFoot.faceNormals.clear();
 }
 
 bool ProjectCharacter::loadFromFile(const std::string& modelPath, ModelMesh& mesh)
@@ -125,6 +146,7 @@ bool ProjectCharacter::loadFromFile(const std::string& modelPath, ModelMesh& mes
 
     mesh.vertices.clear();
     mesh.indices.clear();
+    mesh.faceNormals.clear();
 
     std::string firstLine;
     std::string secondLine;
@@ -196,6 +218,42 @@ bool ProjectCharacter::loadFromFile(const std::string& modelPath, ModelMesh& mes
             mesh.indices.push_back(a);
             mesh.indices.push_back(b);
             mesh.indices.push_back(c);
+
+            if (a < mesh.vertices.size() &&
+                b < mesh.vertices.size() &&
+                c < mesh.vertices.size())
+            {
+                const Vertex& va = mesh.vertices[a];
+                const Vertex& vb = mesh.vertices[b];
+                const Vertex& vc = mesh.vertices[c];
+
+                const float abx = vb.x - va.x;
+                const float aby = vb.y - va.y;
+                const float abz = vb.z - va.z;
+                const float acx = vc.x - va.x;
+                const float acy = vc.y - va.y;
+                const float acz = vc.z - va.z;
+                float nx = aby * acz - abz * acy;
+                float ny = abz * acx - abx * acz;
+                float nz = abx * acy - aby * acx;
+                const float normalLength = std::sqrt(nx * nx + ny * ny + nz * nz);
+                if (normalLength > 0.0001f)
+                {
+                    nx /= normalLength;
+                    ny /= normalLength;
+                    nz /= normalLength;
+                }
+                else
+                {
+                    nx = 0.0f;
+                    ny = 1.0f;
+                    nz = 0.0f;
+                }
+
+                mesh.faceNormals.push_back(nx);
+                mesh.faceNormals.push_back(ny);
+                mesh.faceNormals.push_back(nz);
+            }
         }
     }
     else
@@ -250,6 +308,42 @@ bool ProjectCharacter::loadFromFile(const std::string& modelPath, ModelMesh& mes
                 mesh.indices.push_back(a);
                 mesh.indices.push_back(b);
                 mesh.indices.push_back(c);
+
+                if (a < mesh.vertices.size() &&
+                    b < mesh.vertices.size() &&
+                    c < mesh.vertices.size())
+                {
+                    const Vertex& va = mesh.vertices[a];
+                    const Vertex& vb = mesh.vertices[b];
+                    const Vertex& vc = mesh.vertices[c];
+
+                    const float abx = vb.x - va.x;
+                    const float aby = vb.y - va.y;
+                    const float abz = vb.z - va.z;
+                    const float acx = vc.x - va.x;
+                    const float acy = vc.y - va.y;
+                    const float acz = vc.z - va.z;
+                    float nx = aby * acz - abz * acy;
+                    float ny = abz * acx - abx * acz;
+                    float nz = abx * acy - aby * acx;
+                    const float normalLength = std::sqrt(nx * nx + ny * ny + nz * nz);
+                    if (normalLength > 0.0001f)
+                    {
+                        nx /= normalLength;
+                        ny /= normalLength;
+                        nz /= normalLength;
+                    }
+                    else
+                    {
+                        nx = 0.0f;
+                        ny = 1.0f;
+                        nz = 0.0f;
+                    }
+
+                    mesh.faceNormals.push_back(nx);
+                    mesh.faceNormals.push_back(ny);
+                    mesh.faceNormals.push_back(nz);
+                }
             }
         }
     }
@@ -258,6 +352,8 @@ bool ProjectCharacter::loadFromFile(const std::string& modelPath, ModelMesh& mes
     {
         mesh.vertices.clear();
         mesh.indices.clear();
+        mesh.faceNormals.clear();
+        mesh.displayListId = 0;
         std::cout << "[ProjectCharacter] Model file found but contains no drawable geometry: "
                   << mesh.loadedPath << std::endl;
         return false;
@@ -268,6 +364,86 @@ bool ProjectCharacter::loadFromFile(const std::string& modelPath, ModelMesh& mes
               << " vertices and " << mesh.indices.size() / 3
               << " triangles from " << mesh.loadedPath << std::endl;
     return true;
+}
+
+void ProjectCharacter::buildRenderCache()
+{
+    if (!loaded)
+    {
+        return;
+    }
+
+    float tintR = 1.0f;
+    float tintG = 1.0f;
+    float tintB = 1.0f;
+    getVariantTint(activeVariant, tintR, tintG, tintB);
+
+    compileMeshDisplayList(body, tintR, tintG, tintB);
+    compileMeshDisplayList(leftHand, tintR, tintG, tintB);
+    compileMeshDisplayList(rightHand, tintR, tintG, tintB);
+    compileMeshDisplayList(leftFoot, tintR, tintG, tintB);
+    compileMeshDisplayList(rightFoot, tintR, tintG, tintB);
+}
+
+void ProjectCharacter::compileMeshDisplayList(ModelMesh& mesh, float tintR, float tintG, float tintB) const
+{
+    if (mesh.vertices.empty() || mesh.indices.empty())
+    {
+        return;
+    }
+
+    if (mesh.displayListId != 0)
+    {
+        glDeleteLists(mesh.displayListId, 1);
+        mesh.displayListId = 0;
+    }
+
+    mesh.displayListId = glGenLists(1);
+    if (mesh.displayListId == 0)
+    {
+        return;
+    }
+
+    glNewList(mesh.displayListId, GL_COMPILE);
+    glBegin(GL_TRIANGLES);
+    for (std::size_t i = 0; i + 2 < mesh.indices.size(); i += 3)
+    {
+        if (mesh.indices[i] >= mesh.vertices.size() ||
+            mesh.indices[i + 1] >= mesh.vertices.size() ||
+            mesh.indices[i + 2] >= mesh.vertices.size())
+        {
+            continue;
+        }
+
+        float nx = 0.0f;
+        float ny = 1.0f;
+        float nz = 0.0f;
+        const std::size_t normalIndex = i;
+        if (normalIndex + 2 < mesh.faceNormals.size())
+        {
+            nx = mesh.faceNormals[normalIndex];
+            ny = mesh.faceNormals[normalIndex + 1];
+            nz = mesh.faceNormals[normalIndex + 2];
+        }
+
+        const Vertex& a = mesh.vertices[mesh.indices[i]];
+        const Vertex& b = mesh.vertices[mesh.indices[i + 1]];
+        const Vertex& c = mesh.vertices[mesh.indices[i + 2]];
+
+        glColor4f(std::min(1.0f, a.r * tintR), std::min(1.0f, a.g * tintG), std::min(1.0f, a.b * tintB), 1.0f);
+        glNormal3f(nx, ny, nz);
+        glVertex3f(a.x, a.y, a.z);
+
+        glColor4f(std::min(1.0f, b.r * tintR), std::min(1.0f, b.g * tintG), std::min(1.0f, b.b * tintB), 1.0f);
+        glNormal3f(nx, ny, nz);
+        glVertex3f(b.x, b.y, b.z);
+
+        glColor4f(std::min(1.0f, c.r * tintR), std::min(1.0f, c.g * tintG), std::min(1.0f, c.b * tintB), 1.0f);
+        glNormal3f(nx, ny, nz);
+        glVertex3f(c.x, c.y, c.z);
+    }
+    glEnd();
+    glEndList();
 }
 
 void ProjectCharacter::computeBounds()
@@ -318,6 +494,7 @@ void ProjectCharacter::computeBounds()
 void ProjectCharacter::setVariant(int variantIndex)
 {
     activeVariant = variantIndex;
+    buildRenderCache();
 }
 
 void ProjectCharacter::resetPosition()
@@ -404,55 +581,49 @@ void ProjectCharacter::update(float deltaSeconds)
 
 void ProjectCharacter::drawMesh(const ModelMesh& mesh, float tintR, float tintG, float tintB) const
 {
+    if (mesh.displayListId != 0)
+    {
+        glCallList(mesh.displayListId);
+        return;
+    }
+
     glBegin(GL_TRIANGLES);
-        for (std::size_t i = 0; i + 2 < mesh.indices.size(); i += 3)
+    for (std::size_t i = 0; i + 2 < mesh.indices.size(); i += 3)
+    {
+        if (mesh.indices[i] >= mesh.vertices.size() ||
+            mesh.indices[i + 1] >= mesh.vertices.size() ||
+            mesh.indices[i + 2] >= mesh.vertices.size())
         {
-            if (mesh.indices[i] >= mesh.vertices.size() ||
-                mesh.indices[i + 1] >= mesh.vertices.size() ||
-                mesh.indices[i + 2] >= mesh.vertices.size())
-            {
-                continue;
-            }
-
-            const Vertex& a = mesh.vertices[mesh.indices[i]];
-            const Vertex& b = mesh.vertices[mesh.indices[i + 1]];
-            const Vertex& c = mesh.vertices[mesh.indices[i + 2]];
-
-            const float abx = b.x - a.x;
-            const float aby = b.y - a.y;
-            const float abz = b.z - a.z;
-            const float acx = c.x - a.x;
-            const float acy = c.y - a.y;
-            const float acz = c.z - a.z;
-            float nx = aby * acz - abz * acy;
-            float ny = abz * acx - abx * acz;
-            float nz = abx * acy - aby * acx;
-            const float normalLength = std::sqrt(nx * nx + ny * ny + nz * nz);
-            if (normalLength > 0.0001f)
-            {
-                nx /= normalLength;
-                ny /= normalLength;
-                nz /= normalLength;
-            }
-            else
-            {
-                nx = 0.0f;
-                ny = 1.0f;
-                nz = 0.0f;
-            }
-
-            glColor4f(std::min(1.0f, a.r * tintR), std::min(1.0f, a.g * tintG), std::min(1.0f, a.b * tintB), 1.0f);
-            glNormal3f(nx, ny, nz);
-            glVertex3f(a.x, a.y, a.z);
-
-            glColor4f(std::min(1.0f, b.r * tintR), std::min(1.0f, b.g * tintG), std::min(1.0f, b.b * tintB), 1.0f);
-            glNormal3f(nx, ny, nz);
-            glVertex3f(b.x, b.y, b.z);
-
-            glColor4f(std::min(1.0f, c.r * tintR), std::min(1.0f, c.g * tintG), std::min(1.0f, c.b * tintB), 1.0f);
-            glNormal3f(nx, ny, nz);
-            glVertex3f(c.x, c.y, c.z);
+            continue;
         }
+
+        const Vertex& a = mesh.vertices[mesh.indices[i]];
+        const Vertex& b = mesh.vertices[mesh.indices[i + 1]];
+        const Vertex& c = mesh.vertices[mesh.indices[i + 2]];
+
+        float nx = 0.0f;
+        float ny = 1.0f;
+        float nz = 0.0f;
+        const std::size_t normalIndex = i;
+        if (normalIndex + 2 < mesh.faceNormals.size())
+        {
+            nx = mesh.faceNormals[normalIndex];
+            ny = mesh.faceNormals[normalIndex + 1];
+            nz = mesh.faceNormals[normalIndex + 2];
+        }
+
+        glColor4f(std::min(1.0f, a.r * tintR), std::min(1.0f, a.g * tintG), std::min(1.0f, a.b * tintB), 1.0f);
+        glNormal3f(nx, ny, nz);
+        glVertex3f(a.x, a.y, a.z);
+
+        glColor4f(std::min(1.0f, b.r * tintR), std::min(1.0f, b.g * tintG), std::min(1.0f, b.b * tintB), 1.0f);
+        glNormal3f(nx, ny, nz);
+        glVertex3f(b.x, b.y, b.z);
+
+        glColor4f(std::min(1.0f, c.r * tintR), std::min(1.0f, c.g * tintG), std::min(1.0f, c.b * tintB), 1.0f);
+        glNormal3f(nx, ny, nz);
+        glVertex3f(c.x, c.y, c.z);
+    }
     glEnd();
 }
 

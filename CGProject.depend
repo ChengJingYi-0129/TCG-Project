@@ -190,13 +190,13 @@
 	"CGLabmain.hpp"
 	"THirono.hpp"
 
-1779905879 c:\users\asus\documents\github\tcg-project\cglabmain.hpp
+1781696097 c:\users\asus\documents\github\tcg-project\cglabmain.hpp
 	<string>
 	<cmath>
 	<iostream>
 	<GL/glut.h>
 
-1780155726 c:\users\asus\documents\github\tcg-project\thirono.hpp
+1781697022 c:\users\asus\documents\github\tcg-project\thirono.hpp
 	"CGLabmain.hpp"
 	"THironoSkill.hpp"
 	"skill.hpp"
@@ -207,12 +207,12 @@
 1781689687 c:\users\asus\documents\github\tcg-project\thironoskill.hpp
 	<string>
 
-1781694202 c:\users\asus\documents\github\tcg-project\skill.hpp
+1781699058 c:\users\asus\documents\github\tcg-project\skill.hpp
 	<GL/glut.h>
 	<string>
 	<vector>
 
-1781695247 source:c:\users\asus\documents\github\tcg-project\skill.cpp
+1781699241 source:c:\users\asus\documents\github\tcg-project\skill.cpp
 	<GL/glut.h>
 	<string>
 	<fstream>
@@ -250,7 +250,7 @@
 	"THirono.hpp"
 	"skill.hpp"
 
-1781688189 source:c:\users\asus\documents\github\tcg-project\thironocharacter.cpp
+1781696542 source:c:\users\asus\documents\github\tcg-project\thironocharacter.cpp
 	<algorithm>
 	<cmath>
 	<fstream>
@@ -261,7 +261,7 @@
 	"THirono.hpp"
 	"skill.hpp"
 
-1781689899 source:c:\users\asus\documents\github\tcg-project\thironoskill.cpp
+1781697782 source:c:\users\asus\documents\github\tcg-project\thironoskill.cpp
 	<cmath>
 	"THirono.hpp"
 	"THironoSkill.hpp"

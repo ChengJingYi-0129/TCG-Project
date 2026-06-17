@@ -97,7 +97,9 @@ private:
     struct ModelMesh {
         std::vector<Vertex> vertices;
         std::vector<unsigned int> indices;
+        std::vector<float> faceNormals;
         std::string loadedPath;
+        GLuint displayListId;
         bool loaded;
     };
 
@@ -127,6 +129,8 @@ private:
 
     bool loadFromFile(const std::string& modelPath, ModelMesh& mesh);
     void computeBounds();
+    void buildRenderCache();
+    void compileMeshDisplayList(ModelMesh& mesh, float tintR, float tintG, float tintB) const;
     void drawInternal(float baseX, float baseY, float baseZ, float worldScale, float facingAngle, bool selectedOutline) const;
     void drawMesh(const ModelMesh& mesh, float tintR, float tintG, float tintB) const;
 };
