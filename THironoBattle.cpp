@@ -120,22 +120,41 @@ void MyVirtualWorld::tickTime()
     vfxWorldP1.tickTime();
     vfxWorldP2.tickTime();
 
+    const bool p1UsesCharacter2 = (player1SelectedCharacterIndex == 1);
+    const bool p2UsesCharacter2 = (player2SelectedCharacterIndex == 1);
+
     if (p1Skill1Active) {
         p1Skill1Timer -= deltaSeconds;
         if (p1Skill1Timer <= 0.0f) p1Skill1Active = false;
 
-        float angleRad = p1Skill1Angle * 3.14159265f / 180.0f;
-        p1Skill1PosX += sinf(angleRad) * 11.0f * deltaSeconds;
-        p1Skill1PosZ += cosf(angleRad) * 11.0f * deltaSeconds;
+        if (p1UsesCharacter2) {
+            p1Skill1TickTimer -= deltaSeconds;
+            if (p1Skill1TickTimer <= 0.0f) {
+                float dx = player2Character.getPositionX() - p1Skill1PosX;
+                float dz = player2Character.getPositionZ() - p1Skill1PosZ;
+                float rad = p1Skill1Angle * 3.14159265f / 180.0f;
+                float localX = dx * cosf(rad) - dz * sinf(rad);
+                float localZ = dx * sinf(rad) + dz * cosf(rad);
+                if (localX >= -4.0f && localX <= 4.0f && localZ >= -2.0f && localZ <= 18.0f) {
+                    player2Health -= 4;
+                    p1Skill1TickTimer = 0.4f;
+                    resolveBattleIfNeeded();
+                }
+            }
+        } else {
+            float angleRad = p1Skill1Angle * 3.14159265f / 180.0f;
+            p1Skill1PosX += sinf(angleRad) * 11.0f * deltaSeconds;
+            p1Skill1PosZ += cosf(angleRad) * 11.0f * deltaSeconds;
 
-        p1Skill1TickTimer -= deltaSeconds;
-        if (p1Skill1TickTimer <= 0.0f) {
-            float dx = player2Character.getPositionX() - p1Skill1PosX;
-            float dz = player2Character.getPositionZ() - p1Skill1PosZ;
-            if (sqrt(dx*dx + dz*dz) <= 4.0f) {
-                player2Health -= 4;
-                p1Skill1TickTimer = 0.4f;
-                resolveBattleIfNeeded();
+            p1Skill1TickTimer -= deltaSeconds;
+            if (p1Skill1TickTimer <= 0.0f) {
+                float dx = player2Character.getPositionX() - p1Skill1PosX;
+                float dz = player2Character.getPositionZ() - p1Skill1PosZ;
+                if (sqrt(dx*dx + dz*dz) <= 4.0f) {
+                    player2Health -= 4;
+                    p1Skill1TickTimer = 0.4f;
+                    resolveBattleIfNeeded();
+                }
             }
         }
     }
@@ -144,17 +163,33 @@ void MyVirtualWorld::tickTime()
         p1Skill2Timer -= deltaSeconds;
         if (p1Skill2Timer <= 0.0f) p1Skill2Active = false;
 
-        if (!p1Skill2HasHit) {
-            float dx = player2Character.getPositionX() - p1Skill2PosX;
-            float dz = player2Character.getPositionZ() - p1Skill2PosZ;
-            float rad = p1Skill2Angle * 3.14159265f / 180.0f;
-            float localX = dx * cosf(rad) - dz * sinf(rad);
-            float localZ = dx * sinf(rad) + dz * cosf(rad);
+        if (p1UsesCharacter2) {
+            float angleRad = p1Skill2Angle * 3.14159265f / 180.0f;
+            p1Skill2PosX += sinf(angleRad) * 9.0f * deltaSeconds;
+            p1Skill2PosZ += cosf(angleRad) * 9.0f * deltaSeconds;
 
-            if (localX >= -4.0f && localX <= 4.0f && localZ >= -2.0f && localZ <= 18.0f) {
-                player2Health -= 20;
-                p1Skill2HasHit = true;
-                resolveBattleIfNeeded();
+            if (!p1Skill2HasHit) {
+                float dx = player2Character.getPositionX() - p1Skill2PosX;
+                float dz = player2Character.getPositionZ() - p1Skill2PosZ;
+                if (sqrt(dx*dx + dz*dz) <= 4.0f) {
+                    player2Health -= 20;
+                    p1Skill2HasHit = true;
+                    resolveBattleIfNeeded();
+                }
+            }
+        } else {
+            if (!p1Skill2HasHit) {
+                float dx = player2Character.getPositionX() - p1Skill2PosX;
+                float dz = player2Character.getPositionZ() - p1Skill2PosZ;
+                float rad = p1Skill2Angle * 3.14159265f / 180.0f;
+                float localX = dx * cosf(rad) - dz * sinf(rad);
+                float localZ = dx * sinf(rad) + dz * cosf(rad);
+
+                if (localX >= -4.0f && localX <= 4.0f && localZ >= -2.0f && localZ <= 18.0f) {
+                    player2Health -= 20;
+                    p1Skill2HasHit = true;
+                    resolveBattleIfNeeded();
+                }
             }
         }
     }
@@ -163,19 +198,34 @@ void MyVirtualWorld::tickTime()
         p2Skill1Timer -= deltaSeconds;
         if (p2Skill1Timer <= 0.0f) p2Skill1Active = false;
 
-        p2Skill1TickTimer -= deltaSeconds;
-        if (p2Skill1TickTimer <= 0.0f) {
-            float dx = player1Character.getPositionX() - p2Skill1PosX;
-            float dz = player1Character.getPositionZ() - p2Skill1PosZ;
-            float rad = p2Skill1Angle * 3.14159265f / 180.0f;
-            float localX = dx * cosf(rad) - dz * sinf(rad);
-            float localZ = dx * sinf(rad) + dz * cosf(rad);
+        if (p2UsesCharacter2) {
+            p2Skill1TickTimer -= deltaSeconds;
+            if (p2Skill1TickTimer <= 0.0f) {
+                float dx = player1Character.getPositionX() - p2Skill1PosX;
+                float dz = player1Character.getPositionZ() - p2Skill1PosZ;
+                float rad = p2Skill1Angle * 3.14159265f / 180.0f;
+                float localX = dx * cosf(rad) - dz * sinf(rad);
+                float localZ = dx * sinf(rad) + dz * cosf(rad);
+                if (localX >= -4.0f && localX <= 4.0f && localZ >= -2.0f && localZ <= 18.0f) {
+                    player1Health -= 4;
+                    p2Skill1TickTimer = 0.4f;
+                    resolveBattleIfNeeded();
+                }
+            }
+        } else {
+            float angleRad = p2Skill1Angle * 3.14159265f / 180.0f;
+            p2Skill1PosX += sinf(angleRad) * 11.0f * deltaSeconds;
+            p2Skill1PosZ += cosf(angleRad) * 11.0f * deltaSeconds;
 
-
-            if (localX >= -4.0f && localX <= 4.0f && localZ >= -2.0f && localZ <= 18.0f) {
-                player1Health -= 4;
-                p2Skill1TickTimer = 0.4f;
-                resolveBattleIfNeeded();
+            p2Skill1TickTimer -= deltaSeconds;
+            if (p2Skill1TickTimer <= 0.0f) {
+                float dx = player1Character.getPositionX() - p2Skill1PosX;
+                float dz = player1Character.getPositionZ() - p2Skill1PosZ;
+                if (sqrt(dx*dx + dz*dz) <= 4.0f) {
+                    player1Health -= 4;
+                    p2Skill1TickTimer = 0.4f;
+                    resolveBattleIfNeeded();
+                }
             }
         }
     }
@@ -184,17 +234,33 @@ void MyVirtualWorld::tickTime()
         p2Skill2Timer -= deltaSeconds;
         if (p2Skill2Timer <= 0.0f) p2Skill2Active = false;
 
-        float angleRad = p2Skill2Angle * 3.14159265f / 180.0f;
-        p2Skill2PosX += sinf(angleRad) * 9.0f * deltaSeconds;
-        p2Skill2PosZ += cosf(angleRad) * 9.0f * deltaSeconds;
+        if (p2UsesCharacter2) {
+            float angleRad = p2Skill2Angle * 3.14159265f / 180.0f;
+            p2Skill2PosX += sinf(angleRad) * 9.0f * deltaSeconds;
+            p2Skill2PosZ += cosf(angleRad) * 9.0f * deltaSeconds;
 
-        if (!p2Skill2HasHit) {
-            float dx = player1Character.getPositionX() - p2Skill2PosX;
-            float dz = player1Character.getPositionZ() - p2Skill2PosZ;
-            if (sqrt(dx*dx + dz*dz) <= 4.0f) {
-                player1Health -= 20;
-                p2Skill2HasHit = true;
-                resolveBattleIfNeeded();
+            if (!p2Skill2HasHit) {
+                float dx = player1Character.getPositionX() - p2Skill2PosX;
+                float dz = player1Character.getPositionZ() - p2Skill2PosZ;
+                if (sqrt(dx*dx + dz*dz) <= 4.0f) {
+                    player1Health -= 20;
+                    p2Skill2HasHit = true;
+                    resolveBattleIfNeeded();
+                }
+            }
+        } else {
+            if (!p2Skill2HasHit) {
+                float dx = player1Character.getPositionX() - p2Skill2PosX;
+                float dz = player1Character.getPositionZ() - p2Skill2PosZ;
+                float rad = p2Skill2Angle * 3.14159265f / 180.0f;
+                float localX = dx * cosf(rad) - dz * sinf(rad);
+                float localZ = dx * sinf(rad) + dz * cosf(rad);
+
+                if (localX >= -4.0f && localX <= 4.0f && localZ >= -2.0f && localZ <= 18.0f) {
+                    player1Health -= 20;
+                    p2Skill2HasHit = true;
+                    resolveBattleIfNeeded();
+                }
             }
         }
     }
@@ -311,7 +377,7 @@ bool MyVirtualWorld::handleKeyDown(unsigned char key)
             if (currentScene == SCENE_BATTLE && !battlePaused && !battleEnded && p1Skill2CD <= 0.0f) {
                 p1Skill2Active = true; p1Skill2Timer = 2.5f; p1Skill2CD = 7.0f;
                 p1Skill2HasHit = false;
-                vfxWorldP1.treeScale = 0.0f; vfxWorldP1.fallAngle = 0.0f; vfxWorldP1.fallSpeed = 0.0f;
+                vfxWorldP1.resetSkill();
                 float angleRad = player1Character.getFacingAngle() * 3.14159265f / 180.0f;
                 p1Skill2PosX = player1Character.getPositionX() + sinf(angleRad) * 3.0f;
                 p1Skill2PosZ = player1Character.getPositionZ() + cosf(angleRad) * 3.0f;
@@ -395,6 +461,7 @@ bool MyVirtualWorld::handleKeyDown(unsigned char key)
             if (currentScene == SCENE_BATTLE && !battlePaused && !battleEnded && p1Skill1CD <= 0.0f) {
                 p1Skill1Active = true; p1Skill1Timer = 2.0f; p1Skill1CD = 3.5f;
                 p1Skill1TickTimer = 0.0f;
+                vfxWorldP1.resetSkill();
                 float angleRad = player1Character.getFacingAngle() * 3.14159265f / 180.0f;
                 p1Skill1PosX = player1Character.getPositionX() + sinf(angleRad) * 3.0f;
                 p1Skill1PosZ = player1Character.getPositionZ() + cosf(angleRad) * 3.0f;
@@ -406,7 +473,7 @@ bool MyVirtualWorld::handleKeyDown(unsigned char key)
            if (currentScene == SCENE_BATTLE && !battlePaused && !battleEnded && p2Skill1CD <= 0.0f) {
                 p2Skill1Active = true; p2Skill1Timer = 2.0f; p2Skill1CD = 3.5f;
                 p2Skill1TickTimer = 0.0f;
-                vfxWorldP2.animationStartTime = glutGet(GLUT_ELAPSED_TIME);
+                vfxWorldP2.resetSkill();
                 float angleRad = player2Character.getFacingAngle() * 3.14159265f / 180.0f;
                 p2Skill1PosX = player2Character.getPositionX() + sinf(angleRad) * 3.0f;
                 p2Skill1PosZ = player2Character.getPositionZ() + cosf(angleRad) * 3.0f;
@@ -418,6 +485,7 @@ bool MyVirtualWorld::handleKeyDown(unsigned char key)
             if (currentScene == SCENE_BATTLE && !battlePaused && !battleEnded && p2Skill2CD <= 0.0f) {
                 p2Skill2Active = true; p2Skill2Timer = 2.5f; p2Skill2CD = 7.0f;
                 p2Skill2HasHit = false;
+                vfxWorldP2.resetSkill();
                 float angleRad = player2Character.getFacingAngle() * 3.14159265f / 180.0f;
                 p2Skill2PosX = player2Character.getPositionX() + sinf(angleRad) * 3.0f;
                 p2Skill2PosZ = player2Character.getPositionZ() + cosf(angleRad) * 3.0f;
@@ -528,6 +596,9 @@ void MyVirtualWorld::resolveBattleIfNeeded()
 
 void MyVirtualWorld::drawBattleScene()
 {
+    const int p1CharacterIndex = player1SelectedCharacterIndex;
+    const int p2CharacterIndex = player2SelectedCharacterIndex;
+
     arena.draw();
     player1Character.draw();
     player2Character.draw();
@@ -539,7 +610,7 @@ void MyVirtualWorld::drawBattleScene()
         glTranslatef(p1Skill1PosX, -4.0f, p1Skill1PosZ);
         glRotatef(p1Skill1Angle, 0.0f, 1.0f, 0.0f);
 
-        vfxWorldP1.draw(true, 1);
+        vfxWorldP1.draw(p1CharacterIndex, 1);
         glPopMatrix();
     }
 
@@ -549,7 +620,7 @@ void MyVirtualWorld::drawBattleScene()
         glTranslatef(p1Skill2PosX, -4.0f, p1Skill2PosZ);
         glRotatef(p1Skill2Angle, 0.0f, 1.0f, 0.0f);
 
-        vfxWorldP1.draw(true, 2);
+        vfxWorldP1.draw(p1CharacterIndex, 2);
 
         glPopMatrix();
     }
@@ -561,7 +632,7 @@ void MyVirtualWorld::drawBattleScene()
         glTranslatef(p2Skill1PosX, -4.0f, p2Skill1PosZ);
         glRotatef(p2Skill1Angle, 0.0f, 1.0f, 0.0f);
 
-        vfxWorldP2.draw(false, 1);
+        vfxWorldP2.draw(p2CharacterIndex, 1);
 
         glPopMatrix();
     }
@@ -572,7 +643,7 @@ void MyVirtualWorld::drawBattleScene()
         glTranslatef(p2Skill2PosX, -4.0f, p2Skill2PosZ);
         glRotatef(p2Skill2Angle, 0.0f, 1.0f, 0.0f);
 
-        vfxWorldP2.draw(false, 2);
+        vfxWorldP2.draw(p2CharacterIndex, 2);
 
         glPopMatrix();
     }
@@ -604,15 +675,17 @@ void MyVirtualWorld::drawBattleScene()
     drawHudBar(width - 288.0f, height - 98.0f, 250.0f, 20.0f, player2Health / 100.0f, 0.85f, 0.20f, 0.24f);
 
     glColor3f(0.70f, 0.82f, 1.0f);
+    const SkillDefinition p1Skill1Def = skillSystem.getCharacterSkill(player1SelectedCharacterIndex, 1);
+    const SkillDefinition p1Skill2Def = skillSystem.getCharacterSkill(player1SelectedCharacterIndex, 2);
     std::ostringstream p1HUD;
-    p1HUD << "G: Apple ";
+    p1HUD << "G: " << p1Skill1Def.displayName << " ";
     if (p1Skill1CD > 0.0f) {
         p1HUD << "[" << (int)p1Skill1CD + 1 << "s]";
     } else {
         p1HUD << "[Ready]";
     }
 
-    p1HUD << "  H: Tree ";
+    p1HUD << "  H: " << p1Skill2Def.displayName << " ";
     if (p1Skill2CD > 0.0f) {
         p1HUD << "[" << (int)p1Skill2CD + 1 << "s]";
     } else {
@@ -622,15 +695,17 @@ void MyVirtualWorld::drawBattleScene()
     glColor3f(0.70f, 0.82f, 1.0f);
     drawBitmapText(38.0f, height - 114.0f, GLUT_BITMAP_HELVETICA_12, p1HUD.str());
 
+    const SkillDefinition p2Skill1Def = skillSystem.getCharacterSkill(player2SelectedCharacterIndex, 1);
+    const SkillDefinition p2Skill2Def = skillSystem.getCharacterSkill(player2SelectedCharacterIndex, 2);
     std::ostringstream p2HUD;
-    p2HUD << ">: Vine ";
+    p2HUD << ">: " << p2Skill1Def.displayName << " ";
     if (p2Skill1CD > 0.0f) {
         p2HUD << "[" << (int)p2Skill1CD + 1 << "s]";
     } else {
         p2HUD << "[Ready]";
     }
 
-    p2HUD << "  ?: Tornado ";
+    p2HUD << "  ?: " << p2Skill2Def.displayName << " ";
     if (p2Skill2CD > 0.0f) {
         p2HUD << "[" << (int)p2Skill2CD + 1 << "s]";
     } else {

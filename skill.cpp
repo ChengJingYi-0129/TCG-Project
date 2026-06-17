@@ -95,14 +95,15 @@ void MyVirtualWorld::init()
 
 
 
-void MyVirtualWorld::draw(bool attackerIsPlayer1, int skillIndex)
+void MyVirtualWorld::draw(int characterIndex, int skillIndex)
 {
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
     float currentTime = (glutGet(GLUT_ELAPSED_TIME) - animationStartTime) / 1000.0f;
+    const bool useCharacter1 = (characterIndex == 0);
 
-    if (!attackerIsPlayer1)
+    if (!useCharacter1)
     {
        if (skillIndex != 2) // P2 vine_spike
         {
@@ -126,8 +127,8 @@ void MyVirtualWorld::draw(bool attackerIsPlayer1, int skillIndex)
 
                     float seed = (float)i * 17.3f + (float)j * 29.1f;
 
-                    posX += sin(seed * 4.3f) * 0.25f;
-                    posZ += cos(seed * 3.7f) * 0.5f;
+                    posX += 0.0f;
+                    posZ += 0.0f;
 
                     // 3. 基础缩放 (生成大小不一的随机感)
                     float baseScale = 1.0f + fabs(sin(seed * 5.1f)) * 1.5f;

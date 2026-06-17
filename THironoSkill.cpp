@@ -10,48 +10,61 @@ SkillSystem::SkillSystem()
 {
 }
 
-SkillDefinition SkillSystem::getPlayer1Skill(int skillIndex) const
+SkillDefinition SkillSystem::getCharacterSkill(int characterIndex, int skillIndex) const
 {
     SkillDefinition skill;
+    const bool useCharacter1 = (characterIndex == 0);
+
     if (skillIndex == 2)
     {
-        skill.id = "p1_skill_h";
-        skill.displayName = "Skill H";
-        skill.animationFile = "skills/player1/skill_h.txt";
-        skill.damage = 20;
-        skill.range = 18.0f;
+        if (useCharacter1)
+        {
+            skill.id = "character1_skill_h";
+            skill.displayName = "Tree";
+            skill.animationFile = "skills/character1/skill_h.txt";
+            skill.damage = 20;
+            skill.range = 18.0f;
+        }
+        else
+        {
+            skill.id = "character2_skill_qm";
+            skill.displayName = "Tornado";
+            skill.animationFile = "skills/character2/skill_qm.txt";
+            skill.damage = 20;
+            skill.range = 18.0f;
+        }
     }
     else
     {
-        skill.id = "p1_skill_g";
-        skill.displayName = "Skill G";
-        skill.animationFile = "skills/player1/skill_g.txt";
-        skill.damage = 12;
-        skill.range = 12.0f;
+        if (useCharacter1)
+        {
+            skill.id = "character1_skill_g";
+            skill.displayName = "Apple";
+            skill.animationFile = "skills/character1/skill_g.txt";
+            skill.damage = 12;
+            skill.range = 12.0f;
+        }
+        else
+        {
+            skill.id = "character2_skill_gt";
+            skill.displayName = "Vine";
+            skill.animationFile = "skills/character2/skill_gt.txt";
+            skill.damage = 12;
+            skill.range = 12.0f;
+        }
     }
+
     return skill;
+}
+
+SkillDefinition SkillSystem::getPlayer1Skill(int skillIndex) const
+{
+    return getCharacterSkill(0, skillIndex);
 }
 
 SkillDefinition SkillSystem::getPlayer2Skill(int skillIndex) const
 {
-    SkillDefinition skill;
-    if (skillIndex == 2)
-    {
-        skill.id = "p2_skill_question";
-        skill.displayName = "Skill ?";
-        skill.animationFile = "skills/player2/skill_qm.txt";
-        skill.damage = 20;
-        skill.range = 18.0f;
-    }
-    else
-    {
-        skill.id = "p2_skill_gt";
-        skill.displayName = "Skill >";
-        skill.animationFile = "skills/player2/skill_gt.txt";
-        skill.damage = 12;
-        skill.range = 12.0f;
-    }
-    return skill;
+    return getCharacterSkill(1, skillIndex);
 }
 
 bool SkillSystem::tryApplySkillDamage(bool attackerIsPlayer1,

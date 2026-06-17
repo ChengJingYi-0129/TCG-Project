@@ -19,6 +19,7 @@ class SkillSystem {
 public:
     SkillSystem();
 
+    SkillDefinition getCharacterSkill(int characterIndex, int skillIndex) const;
     SkillDefinition getPlayer1Skill(int skillIndex) const;
     SkillDefinition getPlayer2Skill(int skillIndex) const;
     bool tryApplySkillDamage(bool attackerIsPlayer1,

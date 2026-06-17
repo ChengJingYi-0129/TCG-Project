@@ -52,7 +52,7 @@ public:
     long int animationStartTime;
     void init();
     void resetSkill();
-    void draw(bool attackerIsPlayer1, int skillIndex);
+    void draw(int characterIndex, int skillIndex);
 
     void tickTime()
     {
