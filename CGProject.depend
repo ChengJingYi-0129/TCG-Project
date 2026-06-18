@@ -207,12 +207,12 @@
 1781689687 c:\users\asus\documents\github\tcg-project\thironoskill.hpp
 	<string>
 
-1781699058 c:\users\asus\documents\github\tcg-project\skill.hpp
+1781794132 c:\users\asus\documents\github\tcg-project\skill.hpp
 	<GL/glut.h>
 	<string>
 	<vector>
 
-1781699241 source:c:\users\asus\documents\github\tcg-project\skill.cpp
+1781794132 source:c:\users\asus\documents\github\tcg-project\skill.cpp
 	<GL/glut.h>
 	<string>
 	<fstream>
@@ -220,7 +220,7 @@
 	<algorithm>
 	"skill.hpp"
 
-1780155214 source:c:\users\asus\documents\github\tcg-project\thirono.cpp
+1781794653 source:c:\users\asus\documents\github\tcg-project\thirono.cpp
 	<GL/glut.h>
 	<fstream>
 	<sstream>
@@ -239,7 +239,7 @@
 	"THirono.hpp"
 	"skill.hpp"
 
-1781694625 source:c:\users\asus\documents\github\tcg-project\thironobattle.cpp
+1781794132 source:c:\users\asus\documents\github\tcg-project\thironobattle.cpp
 	<GL/glut.h>
 	<windows.h>
 	<cmath>

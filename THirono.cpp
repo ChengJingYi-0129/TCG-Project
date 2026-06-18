@@ -175,7 +175,8 @@ void MyVirtualWorld::drawHomeScene()
     glPushMatrix();
         glTranslatef(0.0f, -0.8f, -8.0f);
         glRotatef(18.0f, 0.0f, 1.0f, 0.0f);
-        player1Character.drawPreview(0.0f, -3.2f, 0.0f, 0.0f, 1.0f, false);
+        gCharacter1Preview.drawPreview(-8.5f, -3.2f, 0.0f, 0.0f, 0.95f, false);
+        gCharacter2Preview.drawPreview(8.5f, -3.2f, 0.0f, 0.0f, 0.95f, false);
     glPopMatrix();
 
     const int width = glutGet(GLUT_WINDOW_WIDTH);
