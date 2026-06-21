@@ -66,6 +66,8 @@ The project is an OpenGL blind box battle game inspired by POP MART characters. 
 - Battle history system
 
 ## Project Structure
+
+```text
 Project_TCG6223_Group3_CodeBlocks/
 ├─ CGProject.cbp
 ├─ CGLabmain.cpp
