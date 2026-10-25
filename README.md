@@ -1,69 +1,44 @@
-# TCG6223 Blind Box Battle Arena
+# Blind Box Battle Arena
 
-This project is created for TCG6223 Computer Graphics group project.
+A two-player OpenGL battle game created for a Computer Graphics group project. Players choose a character, battle in a 3D arena, and use distinct movement and combat skills.
 
-The project is an OpenGL blind box battle game inspired by POP MART characters. The two main characters are Twinkle-Twinkle Star Apple and Hirono The Rose. Both players can move in the battle arena and use different skills to attack each other.
+## Highlights
 
-## Team Members
+- Two-player local battle system
+- Playable character selection and abilities
+- Health, timer, cooldown, and hit-detection mechanics
+- Character animation, lighting, shading, texture mapping, and visual effects
+- Battle-history tracking
 
-| No. | Student ID | Name |
-|---|---|---|
-| 1 | 242UT244B7 | CHENG JING YI |
-| 2 | 243UT246VF | HAU SHUNXIN |
-| 3 | 243UT246VL | MANDY ONG WEI XUEN |
-| 4 | 252UT253PR | TAI CHENG ZHENG |
+## Tech Stack
 
-## Requirements
+- C++
+- OpenGL, GLU, GLUT
+- Code::Blocks / MinGW
+- Windows
 
-- Windows 10
-- Code::Blocks
-- MinGW C++ Compiler
-- OpenGL, GLU and GLUT library
+## Run Locally
 
-## How to Run
+1. Install Code::Blocks with a MinGW C++ compiler.
+2. Ensure OpenGL, GLU, and GLUT dependencies are available.
+3. Open `Project_TCG6223_Group3_CodeBlocks/CGProject.cbp`.
+4. Keep the `data/` folder, texture assets, and `glut32.dll` alongside the executable.
+5. Build and run.
 
-1. Open `CGProject.cbp` by using Code::Blocks.
-2. Build and run the project by using MinGW C++ compiler.
-3. Make sure the model files, `data` folder, texture image and `glut32.dll` are inside the project folder.
-4. The release executable can also be found in `bin/Release/CGProject.exe`.
+## Controls
 
-## Game Controls
-
-| Function | Control |
-|---|---|
-| Start game / Confirm selection | Enter or Space |
-| Back | B |
-| Pause battle | P |
-| Continue battle | C |
+| Action | Control |
+| --- | --- |
+| Start / confirm selection | Enter or Space |
+| Pause / resume | P / C |
 | Player 1 movement | W, A, S, D |
-| Player 1 sprint | Left Shift |
-| Player 1 Skill 1 | G |
-| Player 1 Skill 2 | H |
-| Player 2 movement | Arrow Keys |
-| Player 2 sprint | Right Ctrl |
-| Player 2 Skill 1 | . or > |
-| Player 2 Skill 2 | / or ? |
-| Zoom in / out | +, - or Mouse Wheel |
-| Rotate view | Left mouse drag |
-| Roll view | Right mouse drag |
-| Toggle wireframe / fill | F1 |
-| Toggle axis | F2 |
-| Toggle lighting | F3 |
-| Exit program | Esc |
-
-## Game Features
-
-- Two playable blind box characters
-- Character selection screen
-- Two player battle system
-- Health point and timer system
-- Character walking animation
-- Apple Star and Apple Tree skills
-- Vine Spike and Vine Tornado skills
-- Skill cooldown and hit detection
-- Lighting, shading and texture mapping
-- Star field and meteor shower background effects
-- Battle history system
+| Player 2 movement | Arrow keys |
+| Player 1 skills | G, H |
+| Player 2 skills | . / |
+| Camera zoom | Mouse wheel or + / - |
+| Camera rotation | Left mouse drag |
+| Toggle wireframe / axes / lighting | F1 / F2 / F3 |
+| Exit | Esc |
 
 ## Project Structure
 
@@ -71,21 +46,12 @@ The project is an OpenGL blind box battle game inspired by POP MART characters. 
 Project_TCG6223_Group3_CodeBlocks/
 ├─ CGProject.cbp
 ├─ CGLabmain.cpp
-├─ CGLabmain.hpp
-├─ THirono.cpp
-├─ THirono.hpp
-├─ THironoArena.cpp
-├─ THironoBattle.cpp
-├─ THironoCharacter.cpp
-├─ THironoSkill.cpp
+├─ THirono*.cpp / .hpp
 ├─ skill.cpp
-├─ character1_*.txt
-├─ character2_*.txt
-├─ 699pic_1ikoqx_xy.jpg
-├─ glut32.dll
 ├─ data/
 └─ bin/Release/
-   ├─ CGProject.exe
-   ├─ glut32.dll
-   ├─ 699pic_1ikoqx_xy.jpg
-   └─ data/
+```
+
+## Project Context
+
+This was a collaborative academic project. My work focused on contributing to the game implementation and the complete playable submission.
